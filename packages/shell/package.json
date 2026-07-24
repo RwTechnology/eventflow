@@ -1,0 +1,23 @@
+{
+  "name": "@ef/shell",
+  "version": "0.0.0",
+  "private": true,
+  "main": "./index.tsx",
+  "types": "./index.tsx",
+  "exports": {
+    ".": "./index.tsx",
+    "./tailwind-preset": "./tailwind-preset.ts"
+  },
+  "dependencies": {
+    "@ef/module-kit": "*",
+    "@rwtechnology/eventflow-design-system": "^0.1.2"
+  },
+  "peerDependencies": {
+    "@tanstack/react-query": "*",
+    "lucide-react": "*",
+    "next": "*",
+    "next-auth": "*",
+    "react": "*",
+    "react-dom": "*"
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "name": "{{name}}",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "predev": "npm run scaffold",
+    "prebuild": "npm run scaffold",
+    "scaffold": "node ../../scripts/scaffold-routes.mjs apps/{{name}}",
+    "dev": "next dev -p {{port}}",
+    "build": "next build",
+    "start": "next start -p {{port}}"
+  },
+  "dependencies": {
+    "{{ns}}/shell": "*",
+    "{{ns}}/auth": "*",
+    "{{ns}}/module-kit": "*"
+  }
+}

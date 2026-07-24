@@ -1,0 +1,9 @@
+import type { AuthProviderDescriptor } from '{{ns}}/module-kit';
+
+// Descripteur auth du module : <camel>AuthDescriptor typé AuthProviderDescriptor (P12).
+// Assemblé côté app via buildAuthOptions([...descriptors]).
+export const {{camel id}}AuthDescriptor: AuthProviderDescriptor = {
+  id: '{{id}}',
+  providers: [],
+  callbacks: {},
+};

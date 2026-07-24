@@ -1,0 +1,15 @@
+import type { Config } from 'tailwindcss';
+import { efPreset } from '{{ns}}/shell/tailwind-preset';
+
+// content globs SCOPÉS aux seuls packages embarqués (P14) : le CSS de cette
+// app n'inclut jamais les classes d'un module non embarqué.
+// Ajouter une ligne '../../packages/<id>/**/*.{ts,tsx}' par module branché.
+const config: Config = {
+  presets: [efPreset],
+  content: [
+    './app/**/*.{ts,tsx}',
+    '../../packages/shell/**/*.{ts,tsx}',
+  ],
+};
+
+export default config;

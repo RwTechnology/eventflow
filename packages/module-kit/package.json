@@ -1,0 +1,10 @@
+{
+  "name": "@ef/module-kit",
+  "version": "0.0.0",
+  "private": true,
+  "main": "./index.ts",
+  "types": "./index.ts",
+  "peerDependencies": {
+    "react": "*"
+  }
+}

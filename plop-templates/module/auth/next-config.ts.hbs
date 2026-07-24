@@ -1,0 +1,9 @@
+import type { ModuleNextConfig } from '{{ns}}/module-kit';
+
+// Contribution du module au next.config.ts de l'app : <camel>NextConfig (P5/P11).
+// - transpile : packages à transpiler pour ce module
+// - rewrites  : proxies backend mergés par l'app
+export const {{camel id}}NextConfig: ModuleNextConfig = {
+  transpile: ['{{ns}}/{{id}}'],
+  rewrites: [],
+};

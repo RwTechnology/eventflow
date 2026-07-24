@@ -1,0 +1,9 @@
+/* Design system publié : tokens (--ef-*) + styles compilés (utilities DA :
+   ef-relief, ef-press, ef-auth-*, animations). Importés AVANT les couches
+   Tailwind pour que les variables de tokens soient disponibles partout. */
+@import '@rwtechnology/eventflow-design-system/tokens.css';
+@import '@rwtechnology/eventflow-design-system/styles.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;

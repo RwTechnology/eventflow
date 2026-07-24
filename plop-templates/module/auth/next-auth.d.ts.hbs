@@ -1,0 +1,10 @@
+// Augmentation des types de session next-auth pour le module {{ns}}/{{id}}.
+// À inclure dans le tsconfig.json de toute app qui embarque ce module (P: §7.2).
+import 'next-auth';
+
+declare module 'next-auth' {
+  interface Session {
+    // Champs de session propres à {{id}}, ex.:
+    // {{camel id}}?: { role: string };
+  }
+}

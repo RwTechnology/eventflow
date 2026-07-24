@@ -1,0 +1,35 @@
+# dependencies
+node_modules/
+**/node_modules/
+
+# next.js
+.next/
+**/.next/
+apps/*/out/
+
+# production
+**/build/
+**/dist/
+
+# env files
+.env
+.env*
+apps/**/.env.local
+
+# logs (garder .gitkeep)
+/logs/*
+!/logs/.gitkeep
+*.log
+npm-debug.log*
+
+# misc
+.DS_Store
+*.pem
+.claude/
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
+
+# auth locale (jamais commitée)
+.npmrc.local

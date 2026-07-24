@@ -1,0 +1,18 @@
+{
+  "name": "console",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "predev": "npm run scaffold",
+    "prebuild": "npm run scaffold",
+    "scaffold": "node ../../scripts/scaffold-routes.mjs apps/console",
+    "dev": "next dev -p 3000",
+    "build": "next build",
+    "start": "next start -p 3000"
+  },
+  "dependencies": {
+    "@ef/auth": "*",
+    "@ef/module-kit": "*",
+    "@ef/shell": "*"
+  }
+}

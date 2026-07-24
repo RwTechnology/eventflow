@@ -1,0 +1,12 @@
+import type { Module } from '{{ns}}/module-kit';
+
+// Export nav du module : <camel>Module typé Module (P8/P19).
+export const {{camel id}}Module: Module = {
+  id: '{{id}}',
+  label: '{{label}}',
+  routePrefix: '/{{id}}',
+  useNavSection: () => ({
+    eyebrow: '{{label}}',
+    items: [{ href: '/{{id}}', label: '{{label}}' }],
+  }),
+};
