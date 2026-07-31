@@ -17,6 +17,7 @@ const config: Config = {
   content: [
     './app/**/*.{ts,tsx}',
     '../../packages/shell/**/*.{ts,tsx}',
+    '../../packages/partner/**/*.{ts,tsx}',
     '../../node_modules/@rwtechnology/eventflow-design-system/dist/**/*.js',
   ],
 };

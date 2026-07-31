@@ -1,10 +1,10 @@
 import path from 'node:path';
 import type { NextConfig } from 'next';
 import type { ModuleNextConfig } from '@ef/module-kit';
+import { partnerNextConfig } from '@ef/partner/next-config';
 
-// Chaque module à backend contribue son <camel>NextConfig ici (P5/P11).
-// Aucun module embarqué actuellement.
-const moduleConfigs: ModuleNextConfig[] = [];
+// Chaque module embarqué contribue son <camel>NextConfig ici (P5/P11).
+const moduleConfigs: ModuleNextConfig[] = [partnerNextConfig];
 
 // Packages internes toujours transpilés (infra) + modules embarqués (P5).
 // La liste blanche IP réelle reste le package.json de l'app (P3).

@@ -13,6 +13,7 @@
   "dependencies": {
     "@ef/auth": "*",
     "@ef/module-kit": "*",
+    "@ef/partner": "*",
     "@ef/shell": "*"
   }
 }
