@@ -16,40 +16,34 @@ n'est possible. Point clos, ne pas rouvrir.
 
 ## 1. Lot courant
 
-**`apps/partner` creee, ecran 3 livre. En attente de validation.**
+**Ecran 4, liste des evenements TERMINE (PTN-3, PTN-7, PTN-11).**
 
-Deuxieme application du monorepo, conforme au cahier des charges (§9.2) qui la
-nomme `apps/partner`. Ses routes portent le prefixe `partner-console`, par
-symetrie avec `master-console`.
+Module `@ef/partner-events`, route `/partner-console/evenements`. Les 7
+evenements du prototype couvrent les **6 etats du cycle de vie** : la liste est
+la demonstration du cycle, c'est ce que la maquette montre.
 
-Squelette pose par `npm run gen:app`, 16 fichiers. Port 3100.
+Toolbar avec recherche sur titre et lieu, tri, filtres en segments avec leurs
+compteurs. Table : bloc-date S3, `StatusBadge` du cycle, `CapacityGauge` inline
+ou texte de presence selon l'etat, colonne attente, actions dupliquer (PTN-7,
+directe) et archiver (sur les termines). Lignes passees attenuees. CTA
+« Nouvel evenement » verrouille avec tooltip (PTN-11), coherent avec le
+GateBanner de l'ecran 3.
 
-**`PartnerShell` dans `@ef/shell`** : le **meme `AppShell`** que la Console
-Maitre, sans la prop `master`. La maquette impose une seule coquille pour les
-deux consoles ; ce qui distingue le partenaire, c'est ce que le maitre n'a pas
-(selecteur d'Organisation en haut, profil en bas) et l'absence du lisere et du
-badge maitre.
+**Les 6 badges de cycle de vie ajoutes au design system** (`0.1.15`) : c'est
+l'ecart consigne comme differe il y a plusieurs lots, en notant qu'il serait
+requis par les ecrans 4 et 6. L'ecran 4 est arrive.
 
-**Module `@ef/partner-dashboard`** (PTN-1) : 4 tuiles, tendance 7 jours,
-GateBanner de la limite Free (PTN-11). Route `/partner-console`.
+**Defaut rencontre** : `Tooltip` leve une erreur sans `TooltipProvider`, le build
+echouait au prerendu. Le provider est monte dans `Providers` du shell, a la
+racine des deux apps : une app peut afficher un tooltip n'importe ou, le monter
+une fois evite d'y penser a chaque usage.
 
-**Trois manques du generateur, corriges dans les templates** pour que la
-prochaine app n'ait pas le probleme :
-- `globals.css` n'importait ni les tokens ni les styles du design system ;
-- `tailwind.config.ts` n'avait ni le preset du design system ni le glob de son
-  `dist` ;
-- `package.json` ne declarait pas le design system en dependance.
+**Verifications** : typecheck 0 sur les 2 apps, les 2 builds reussissent, la
+route repond 200, capture conforme, sonde DOM confirmant 7 boutons Dupliquer et
+1 Archiver sur l'evenement termine, lint 0 erreur.
 
-Sans ces trois, la page rendait en HTML brut : barres noires, textes non stylees.
-Constate par capture, corrige, recapture conforme.
-
-`scaffold:all` couvrait seulement `apps/console` ; il couvre desormais les deux.
-
-**Verifications** : typecheck 0 sur les 2 apps, les 2 builds reussissent, les 3
-routes partner repondent (`/` en 307), capture conforme, lint 0 erreur.
-
-**Reste sur `apps/partner`** : ecrans 4 a 8 (liste des evenements, creation en
-5 etapes, detail en 5 onglets, page Plan, etats de gating).
+**Reste sur `apps/partner`** : ecrans 5 (creation en 5 etapes), 6 (detail en
+5 onglets), 7 (page Plan), 8 (etats de gating).
 
 ## 2. Lots termines
 

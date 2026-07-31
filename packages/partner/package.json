@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "@ef/module-kit": "*",
-    "@rwtechnology/eventflow-design-system": "^0.1.14"
+    "@rwtechnology/eventflow-design-system": "^0.1.15"
   },
   "peerDependencies": {
     "lucide-react": "*",

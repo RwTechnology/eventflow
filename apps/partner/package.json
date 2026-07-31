@@ -14,7 +14,8 @@
     "@ef/auth": "*",
     "@ef/module-kit": "*",
     "@ef/partner-dashboard": "*",
+    "@ef/partner-events": "*",
     "@ef/shell": "*",
-    "@rwtechnology/eventflow-design-system": "^0.1.14"
+    "@rwtechnology/eventflow-design-system": "^0.1.15"
   }
 }

@@ -1,5 +1,5 @@
 {
-  "name": "@ef/platform",
+  "name": "@ef/partner-events",
   "version": "0.0.0",
   "private": true,
   "main": "./index.tsx",

@@ -1,0 +1,8 @@
+{
+  "id": "partner-events",
+  "package": "@ef/partner-events",
+  "basePath": "(app)/partner-console",
+  "routes": [
+    { "route": "evenements/page.tsx", "module": "events-page" }
+  ]
+}

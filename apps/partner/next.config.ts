@@ -5,8 +5,12 @@ import type { ModuleNextConfig } from '@ef/module-kit';
 // Chaque module à backend contribue son <camel>NextConfig ici (P5/P11).
 // Ajouté manuellement lors du branchement d'un module à backend (cf. §7.2).
 import { partnerDashboardNextConfig } from '@ef/partner-dashboard/next-config';
+import { partnerEventsNextConfig } from '@ef/partner-events/next-config';
 
-const moduleConfigs: ModuleNextConfig[] = [partnerDashboardNextConfig];
+const moduleConfigs: ModuleNextConfig[] = [
+  partnerDashboardNextConfig,
+  partnerEventsNextConfig,
+];
 
 // Packages internes toujours transpilés (infra) + modules embarqués.
 // La liste blanche IP réelle reste le package.json de l'app (P3).
