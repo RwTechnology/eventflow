@@ -14,6 +14,7 @@
     "@ef/auth": "*",
     "@ef/module-kit": "*",
     "@ef/partner": "*",
+    "@ef/platform": "*",
     "@ef/shell": "*"
   }
 }

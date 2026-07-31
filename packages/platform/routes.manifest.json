@@ -1,0 +1,8 @@
+{
+  "id": "platform",
+  "package": "@ef/platform",
+  "basePath": "(app)",
+  "routes": [
+    { "route": "page.tsx", "module": "platform-page" }
+  ]
+}

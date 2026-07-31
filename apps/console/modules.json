@@ -1,6 +1,7 @@
 {
   "brand": "EventFlow Console",
   "modules": [
+    "@ef/platform",
     "@ef/partner"
   ]
 }
