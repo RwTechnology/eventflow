@@ -1,70 +1,96 @@
-# AGENTS.md — Instructions pour les agents IA (EventFlow)
+# AGENTS.md, EventFlow
 
-Ce dépôt est un **monorepo npm-workspaces** (pas Turborepo, pas Nx, pas pnpm).
-Namespace des packages internes : **`@ef/*`**. Référence d'architecture complète :
-[`MONOREPO-GUIDE.md`](../MONOREPO-GUIDE.md) (à la racine du dossier de travail).
+Repository governed by a binding specification. Nothing is implemented without a numbered requirement.
+Three linked repositories, one direction: mockup defines, design system implements, eventflow consumes.
 
-## 1. Règles de fond (à ne JAMAIS violer)
+## 0. Before any implementation task
 
-- **Un module = un package `@ef/<id>` dans `packages/`. Une app = une composition
-  dans `apps/`.** Ne jamais écrire de logique produit directement dans une app.
-- **Les corps de page vivent UNIQUEMENT dans `packages/<m>/pages/`.** Dans une app,
-  une route est toujours un re-export **généré** — ne jamais l'écrire à la main
-  ni y mettre de logique. Fichiers portant la bannière `// GENERATED …` = **ne pas éditer**.
-- **La frontière IP est le `package.json` de l'app.** Ne jamais faire importer à une
-  app (ou à ses modules) un package absent de ses `dependencies`. Ne jamais suggérer
-  d'importer directement entre modules produits.
-- **Ne jamais introduire Turbo/Nx/pnpm** : l'outillage est **npm workspaces** uniquement.
-  Un seul lockfile à la racine.
-- **Packages consommés en TS source** : pas d'étape de build par package, pas de `dist/`.
-  Tout nouveau package `@ef/*` embarqué par une app doit être ajouté à son
-  `transpilePackages` (dans `next.config.ts`).
+Implementation task: any creation or modification of code, component, page, route, package, configuration.
 
-## 2. Workflow à imposer
+1. Invoke the `conformite-cdc` skill.
+2. Read the specification, Read tool, PDF: `EventFlow-Cahier-des-Charges (1).pdf` at the repository root.
+3. State before writing: the requirement identifiers covered and the R1 to R7 rules engaged.
 
-- **Créer un module** : `npm run gen:module` (puis `gen:register` pour l'attacher à une app).
-- **Créer une app** : `npm run gen:app`.
-- **(Dé)brancher un module d'une app** : `npm run gen:register` / `gen:unregister`.
-  Ces générateurs éditent `modules.json`, `registry.ts` et le `package.json` de l'app
-  par **parsing JSON** — ne pas éditer ces fichiers à la main quand un générateur existe.
-- Après tout ajout/retrait de module : `npm install` puis
-  `npm run build -w apps/<app>` (le `prebuild` régénère et prune les routes).
-- **Module à backend** : 3 câblages manuels après `gen:module --variant auth` :
-  1. ajouter le `<camel>AuthDescriptor` à `auth-options.ts` de l'app ;
-  2. ajouter `../../packages/<id>/next-auth.d.ts` au `include` du `tsconfig.json` de l'app ;
-  3. ajouter `<camel>NextConfig` aux `moduleConfigs` de `next.config.ts` de l'app.
+**Skill invocation is not guaranteed.** It depends on a relevance judgment.
+Fallback if the skill was not invoked: rules RG-1 to RG-5 and the stop criteria in this file
+apply in full, the closing block in section 4 remains mandatory, and any mockup gap still
+triggers a STOP under RG-5 instead of a local workaround.
+When in doubt about invocation, explicitly invoke `conformite-cdc` before continuing.
 
-## 3. Conventions à faire respecter
+## 1. Inviolable rules
 
-- id module `kebab-case` ; export nav `<camel>Module` ; export de page `<Pascal>Page` ;
-  package `@ef/<id>`.
-- `registry.ts` : ordre = ordre des eyebrows ; `systemModule` en dernier.
-- Tailwind `content` : scoper aux **seuls** packages embarqués — ne jamais élargir
-  à `packages/**` global.
-- `proxy.ts` : `export const config` doit rester un **littéral inline** (Next 16 le parse
-  statiquement) — ne pas le remplacer par un import.
+**RG-1.** No component is written in `apps/console`. Every component lives in the design system,
+is republished, then consumed from `@rwtechnology/eventflow-design-system`. `apps/console`
+contains assembly only: pages, layouts, calls.
+Observable violation: a file under `apps/console/app/` that defines a reusable presentation
+component instead of importing it.
 
-## 4. Avant de valider une réponse (vérification)
+**RG-2.** No new library without prior approval. Applies to dependencies, devDependencies and
+deliberately added transitive dependencies. Reuse existing components and tokens first.
+Observable violation: `git diff` on any `package.json` in the repository adding an entry,
+without explicit approval recorded in the conversation.
 
-1. Le nouveau code produit est-il dans `packages/`, jamais dans `apps/` ?
-2. L'app cible liste-t-elle le module dans `package.json` **et** `modules.json`
-   **et** `registry.ts` ?
-3. Le module a-t-il un `routes.manifest.json` cohérent avec ses `pages/` ?
-4. `transpilePackages` et le `content` Tailwind de l'app incluent-ils le nouveau package ?
-5. Aucun import ne traverse la frontière IP (module→module, ou app→package non déclaré) ?
+**RG-3.** Every structural decision cites its source, in the format `(CdC PTN-4)`,
+`(CdC 9.3 R3)`, `(MONOREPO-GUIDE P5)`, `(mockup Page 3)`.
+Observable violation: a structural decision with no citation in parentheses.
 
-## 5. Contrainte projet particulière (OBLIGATOIRE)
+**RG-4.** Nothing invented, nothing unverified. Never report the result of a command that was
+not executed. Every unverified statement is prefixed with `hypothesis:`.
+Observable violation: a build, test or publication result asserted without real output shown.
 
-Ce dépôt tourne sur **Next.js 16** (breaking changes vs. connaissances d'entraînement).
-**Avant d'écrire du code Next.js, lire le guide pertinent dans
-`node_modules/next/dist/docs/`** et respecter les avis de dépréciation. Points saillants
-déjà pris en compte dans ce socle :
+**RG-5.** A component that does not match the mockup is fixed in the design system, never
+worked around in the consumer. No local override, no wrapper correcting the appearance, no
+inline style or class compensating for the component, no hard coded color, spacing or font
+value. Values come from tokens.
+Observable violation: a style declaration in `apps/console` or `packages/` that restyles an
+imported design system component, or a literal color, size or duration where a token exists.
 
-- **`middleware.ts` → `proxy.ts`** : le fichier s'appelle `proxy.ts`, la fonction `proxy`.
-  Runtime `nodejs` (edge non supporté).
-- **Turbopack par défaut** pour `next dev`/`next build` : ne pas ajouter de config `webpack`
-  (le build échouerait).
-- **APIs de requête asynchrones** : `cookies()`, `headers()`, `params`, `searchParams`
-  sont des Promises — toujours `await`.
-- **`next lint` supprimé** : le lint passe par `eslint` directement (script racine `lint`).
-- **Config ESLint plate** (flat config) unique à la racine.
+## 2. Sources of truth
+
+Documents outside the repository. Read them with the Read tool using absolute paths. `@import` does not load them.
+
+| Rank | Source | Path |
+|---|---|---|
+| 1 | Specification, the only binding version | `/home/ralotchin/monorepo-test/eventflow/EventFlow-Cahier-des-Charges (1).pdf` |
+| 2 | Mockups, visual reference | `/home/ralotchin/monorepo-test/eventflow-prototype/` |
+| 3 | Art direction, binding for all rendering | `/home/ralotchin/monorepo-test/eventflow-design-system/docs/ART-DIRECTION.md` |
+| 4 | Design system run doc, real component state | `/home/ralotchin/monorepo-test/eventflow-design-system/RUNDOC.md` |
+| 5 | Monorepo guide, principles P1 to P20 | `/home/ralotchin/monorepo-test/MONOREPO-GUIDE.md` |
+| 6 | Backend guide, separate repository | `/home/ralotchin/monorepo-test/BACKEND-GUIDE.md` |
+
+Conflict: specification first, then mockup, then guides, then existing code. A conflict is
+reported, never resolved silently.
+
+The specification describes a target that differs from the repository, notably the number of
+applications, the package namespace and the location of the design system. Note the gap, do not
+correct it spontaneously. RG-1 takes precedence over the tree described in 9.2.
+
+## 3. Architecture
+
+Rules R1 to R7 are defined in section 9.3 of the specification. Read them at the source before
+any structural modification. Any exception falling under R7 is documented before commit.
+
+Repository conventions: internal packages under `@ef/`, `modules.json` and `registry.ts` edited
+through `npm run gen:register` and `gen:unregister` and never by hand, routes generated by
+`npm run scaffold:all`.
+
+## 4. Stop criteria
+
+Explicit STOP, no workaround: no numbered requirement covers the request, a component would have
+to be written outside the design system, a component does not match the mockup, a new library is
+needed, the request falls outside the v1 scope, the specification contradicts the mockup, a
+verification cannot be executed.
+
+A STOP states: what blocks, the rule involved, the options. Then wait for validation.
+
+Mandatory closing block at the end of every implementation task:
+requirements covered, reference mockup, components used and components created or fixed in the
+design system, confirmation that no component was written in `apps/console`, new libraries,
+R1 to R7 compliance, verifications executed with real output, unverified items, hypotheses.
+
+## 5. Git
+
+- NEVER add `Co-Authored-By: Claude <noreply@anthropic.com>` (or any other attribution to Claude) in commit messages.
+- NEVER add "Generated with [Claude Code](https://claude.com/claude-code)" or "Generated with Claude Code" in commits or PR descriptions.
+- Commit messages must contain only the message itself, with no attribution trailer, no emoji, no promotional link.
+- These rules also apply to any commit message or PR description drafted in chat for manual use.
