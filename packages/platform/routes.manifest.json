@@ -1,7 +1,7 @@
 {
   "id": "platform",
   "package": "@ef/platform",
-  "basePath": "(app)",
+  "basePath": "(app)/master-console",
   "routes": [
     { "route": "page.tsx", "module": "platform-page" }
   ]

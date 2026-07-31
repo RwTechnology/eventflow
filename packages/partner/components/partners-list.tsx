@@ -148,7 +148,7 @@ const columns: ColumnDef<Organization, unknown>[] = [
           <div className="min-w-0">
             {/* La ligne mène à la fiche Organisation (maquette écran 11). */}
             <Link
-              href={`/partenaires/${o.slug}`}
+              href={`/master-console/partenaires/${o.slug}`}
               className="truncate font-semibold text-text-primary hover:text-primary-700 hover:underline"
             >
               {o.name}

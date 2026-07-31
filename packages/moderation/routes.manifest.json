@@ -1,7 +1,7 @@
 {
   "id": "moderation",
   "package": "@ef/moderation",
-  "basePath": "(app)",
+  "basePath": "(app)/master-console",
   "routes": [
     { "route": "moderation/page.tsx", "module": "moderation-page" }
   ]

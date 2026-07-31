@@ -8,10 +8,10 @@ import type { Module } from '@ef/module-kit';
 export const auditModule: Module = {
   id: 'audit',
   label: 'Audit',
-  routePrefix: '/audit',
+  routePrefix: '/master-console/audit',
   useNavSection: () => ({
     eyebrow: 'Contrôle',
-    items: [{ href: '/audit', label: 'Audit', icon: <ScrollText /> }],
+    items: [{ href: '/master-console/audit', label: 'Audit', icon: <ScrollText /> }],
   }),
 };
 

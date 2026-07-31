@@ -16,37 +16,34 @@ n'est possible. Point clos, ne pas rouvrir.
 
 ## 1. Lot courant
 
-**Lot Etats systeme TERMINE (ecran 9). En attente de validation.**
+**Prefixe `/master-console` TERMINE. En attente de validation.**
 
-Les trois etats transverses de l'ecran 9 sont des **patterns**, pas une route :
-ils s'appliquent la ou un ecran charge ou echoue. Ils vivent donc dans
-`@ef/shell`, reutilisables par tout module, pas dans un module metier.
+Les 5 routes de la Console Maitre passent sous `/master-console` :
 
-| Etat | Ou | Declenchement |
-|---|---|---|
-| Chargement | `DashboardSkeleton` | `/?etat=chargement` |
-| Erreur | `StaleDataBanner` + `StaleDataRegion` | `/?etat=erreur` |
-| Vide | `EmptyState` du design system | deja utilise par la moderation |
+| Avant | Apres |
+|---|---|
+| `/` | `/master-console` |
+| `/partenaires` | `/master-console/partenaires` |
+| `/partenaires/[slug]` | `/master-console/partenaires/[slug]` |
+| `/moderation` | `/master-console/moderation` |
+| `/audit` | `/master-console/audit` |
 
-`?etat=` reprend la convention deja etablie par la page de login pour ses etats
-de demonstration.
+Change dans les **manifestes** (`basePath`) et les **modules** (`routePrefix` +
+`href` de nav), jamais dans l'app : `npm run scaffold:all` a regenere les 5
+routes et supprime les 5 anciennes. La nav a suivi seule, puisqu'elle derive du
+registry.
 
-**Principe de la maquette respecte** : le squelette reproduit la geometrie reelle
-(meme grille de 4 tuiles, meme hauteur de graphe, memes lignes de liste), donc la
-page ne saute pas a l'arrivee des donnees. En erreur, on **ne jette jamais
-l'ecran** : les dernieres donnees restent visibles, attenuees et en lecture
-seule, sous un bandeau qui explique, rassure et donne une reference tracable.
+`apps/console/app/page.tsx` recree : la racine redirige vers le `routePrefix` du
+premier module, donc vers `/master-console`. Sans module embarque, elle retombe
+sur `/login`.
 
-**Defaut rencontre** : `?etat=erreur` renvoyait 500. Cause — la page est un
-composant serveur et passait `onRetry`, une fonction, a un composant client.
-Next l'interdit. Le bandeau gere desormais son propre etat de reessai.
+**Verifications** : typecheck 0, build reussi 6 routes, les 5 routes repondent
+200, `/` redirige en 307, rendu et nav inchanges, lint 0 erreur, aucun lien non
+prefixe.
 
-**Verifications** : typecheck 0, build reussi, les deux etats repondent 200,
-captures conformes, lint 0 erreur, aucune primitive de couleur.
-
-**L'etat vide n'a pas de route de demonstration** : il est deja visible sur la
-moderation quand la file se vide, et la maquette le montre sur la liste
-d'evenements, ecran qui vise `apps/partner`.
+**Ecart assume avec la maquette** : `Etape 0 - Plan consoles.html` place la
+Console Maitre a la racine de `apps/console`, c'est elle l'application. Le
+prefixe est un choix explicite de l'utilisateur, hors maquette.
 
 ## 2. Lots termines
 

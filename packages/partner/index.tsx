@@ -25,12 +25,12 @@ function NavCount({ children }: { children: React.ReactNode }) {
 export const partnerModule: Module = {
   id: 'partner',
   label: 'Partenaires',
-  routePrefix: '/partenaires',
+  routePrefix: '/master-console/partenaires',
   useNavSection: () => ({
     eyebrow: 'Plateforme',
     items: [
       {
-        href: '/partenaires',
+        href: '/master-console/partenaires',
         label: 'Partenaires',
         icon: <Building2 />,
         trailing: <NavCount>{ORGANIZATION_COUNT}</NavCount>,

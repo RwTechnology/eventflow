@@ -1,7 +1,7 @@
 {
   "id": "partner",
   "package": "@ef/partner",
-  "basePath": "(app)",
+  "basePath": "(app)/master-console",
   "routes": [
     { "route": "partenaires/page.tsx", "module": "partners-page" },
     { "route": "partenaires/[slug]/page.tsx", "module": "partner-detail-page" }

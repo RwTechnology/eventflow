@@ -22,12 +22,12 @@ function NavCount({ children }: { children: React.ReactNode }) {
 export const moderationModule: Module = {
   id: 'moderation',
   label: 'Modération',
-  routePrefix: '/moderation',
+  routePrefix: '/master-console/moderation',
   useNavSection: () => ({
     eyebrow: 'Contrôle',
     items: [
       {
-        href: '/moderation',
+        href: '/master-console/moderation',
         label: 'Modération',
         icon: <Flag />,
         trailing: <NavCount>{PENDING_REPORTS}</NavCount>,

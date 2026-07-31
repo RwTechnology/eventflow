@@ -10,10 +10,10 @@ import type { Module } from '@ef/module-kit';
 export const platformModule: Module = {
   id: 'platform',
   label: 'Plateforme',
-  routePrefix: '/',
+  routePrefix: '/master-console',
   useNavSection: () => ({
     eyebrow: 'Plateforme',
-    items: [{ href: '/', label: 'Plateforme', icon: <LayoutGrid /> }],
+    items: [{ href: '/master-console', label: 'Plateforme', icon: <LayoutGrid /> }],
   }),
 };
 
