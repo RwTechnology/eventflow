@@ -17,4 +17,8 @@ export const platformModule: Module = {
   }),
 };
 
-export { PlatformDashboard } from './components/platform-dashboard';
+export {
+  PlatformDashboard,
+  type PlatformDashboardProps,
+  type DashboardState,
+} from './components/platform-dashboard';

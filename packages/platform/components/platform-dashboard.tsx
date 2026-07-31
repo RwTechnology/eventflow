@@ -1,3 +1,4 @@
+import * as React from 'react';
 import { Building2, CalendarDays, CircleCheck, Ticket } from 'lucide-react';
 import { Avatar } from '@rwtechnology/eventflow-design-system/avatar';
 import { Badge } from '@rwtechnology/eventflow-design-system/badge';
@@ -11,6 +12,7 @@ import {
   TrendChart,
   type TrendPoint,
 } from '@rwtechnology/eventflow-design-system/trend-chart';
+import { DashboardSkeleton, StaleDataBanner, StaleDataRegion } from '@ef/shell';
 
 // PlatformDashboard — tableau de bord de la Console Maître (CdC CSM-1).
 // Composé à 100 % depuis le design system publié (RG-1).
@@ -103,7 +105,26 @@ function MiniRow({
   );
 }
 
-export function PlatformDashboard() {
+/** Etats transverses de l'ecran 9, montres dans le contexte reel du dashboard. */
+export type DashboardState = 'chargement' | 'erreur';
+
+export interface PlatformDashboardProps {
+  /**
+   * Etat de demonstration (maquette ecran 9). Sans valeur, le tableau de bord
+   * affiche ses donnees. Le backend etant un chantier separe (CdC §9.4), ces
+   * etats se declenchent par `?etat=` plutot que par un vrai chargement.
+   */
+  demoEtat?: DashboardState;
+}
+
+export function PlatformDashboard({ demoEtat }: PlatformDashboardProps) {
+  // Chargement : le squelette reproduit la geometrie reelle, la page ne saute pas.
+  if (demoEtat === 'chargement') return <DashboardSkeleton />;
+
+  // En erreur, les dernieres donnees connues restent visibles mais attenuees et
+  // en lecture seule ; sinon elles s'affichent normalement.
+  const Stale = demoEtat === 'erreur' ? StaleDataRegion : React.Fragment;
+
   return (
     <div className="flex flex-col gap-4">
       <div>
@@ -113,12 +134,22 @@ export function PlatformDashboard() {
         </p>
       </div>
 
+      {/* Erreur : on ne jette jamais l'ecran, les dernieres donnees restent. */}
+      {demoEtat === 'erreur' ? (
+        <StaleDataBanner
+          subject="les données de la plateforme"
+          reference="EF-5A2E"
+          timestamp="15 juil. 11:42"
+        />
+      ) : null}
+
       {/* 4 tuiles : 2 colonnes sous 1280px, 4 au-delà (maquette écran 10) */}
-      <div className="grid grid-cols-2 gap-4 xl:grid-cols-4">
-        {STATS.map((s) => (
-          <StatCard key={s.label} {...s} />
-        ))}
-      </div>
+      <Stale>
+        <div className="grid grid-cols-2 gap-4 xl:grid-cols-4">
+          {STATS.map((s) => (
+            <StatCard key={s.label} {...s} />
+          ))}
+        </div>
 
       {/* Tendance à gauche, panneaux de contrôle à droite */}
       <div className="grid grid-cols-1 items-start gap-4 xl:grid-cols-[2fr_1fr]">
@@ -191,7 +222,8 @@ export function PlatformDashboard() {
             </div>
           </Card>
         </div>
-      </div>
+        </div>
+      </Stale>
     </div>
   );
 }

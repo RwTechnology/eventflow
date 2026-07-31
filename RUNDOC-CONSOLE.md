@@ -16,35 +16,37 @@ n'est possible. Point clos, ne pas rouvrir.
 
 ## 1. Lot courant
 
-**Passe theme sombre et responsive TERMINEE. Cinq defauts trouves et corriges.**
+**Lot Etats systeme TERMINE (ecran 9). En attente de validation.**
 
-Toutes les pages livrees capturees en sombre, plus les 3 vues du login. Cinq
-defauts, tous causes par la meme faute : des **primitives de couleur** la ou il
-fallait des **roles semantiques**.
+Les trois etats transverses de l'ecran 9 sont des **patterns**, pas une route :
+ils s'appliquent la ou un ecran charge ou echoue. Ils vivent donc dans
+`@ef/shell`, reutilisables par tout module, pas dans un module metier.
 
-| Defaut | Ou | Correctif | Version |
-|---|---|---|---|
-| Table ecrasee sous 720 px | `DataTable` | seuil `min-w-table`, defilement | `0.1.11` |
-| Item de nav actif illisible | `Sidebar` | roles `surface-selected` / `text-selected` | `0.1.12` |
-| Selection trop saturee | `Sidebar` | opacite 60 %, conforme a `shell.css` | `0.1.13` |
-| Titre du login invisible | `AuthLayout` | panneau formulaire en `text-text-primary` | `0.1.14` |
-| « Rester connectee » illisible | `auth-page.tsx` | `text-gray-700` en `text-text-primary` | consommateur |
+| Etat | Ou | Declenchement |
+|---|---|---|
+| Chargement | `DashboardSkeleton` | `/?etat=chargement` |
+| Erreur | `StaleDataBanner` + `StaleDataRegion` | `/?etat=erreur` |
+| Vide | `EmptyState` du design system | deja utilise par la moderation |
 
-Les trois premiers defauts avaient ete reproduits dans mes fichiers : compteurs
-de nav, item selectionne de la file. Tous corriges. **Plus aucune primitive de
-couleur dans le code du consommateur.**
+`?etat=` reprend la convention deja etablie par la page de login pour ses etats
+de demonstration.
 
-**`npm run lint` renvoie 0 erreur** pour la premiere fois : l'entite non echappee
-de `auth-page.tsx`, ouverte depuis le lot Auth, est corrigee.
+**Principe de la maquette respecte** : le squelette reproduit la geometrie reelle
+(meme grille de 4 tuiles, meme hauteur de graphe, memes lignes de liste), donc la
+page ne saute pas a l'arrivee des donnees. En erreur, on **ne jette jamais
+l'ecran** : les dernieres donnees restent visibles, attenuees et en lecture
+seule, sous un bandeau qui explique, rassure et donne une reference tracable.
 
-**Pages verifiees en sombre** : tableau de bord, moderation, audit, fiche
-partenaire, liste des partenaires, login (connexion et inscription).
+**Defaut rencontre** : `?etat=erreur` renvoyait 500. Cause — la page est un
+composant serveur et passait `onRetry`, une fonction, a un composant client.
+Next l'interdit. Le bandeau gere desormais son propre etat de reessai.
 
-**Responsive** : verifie a 390 px sur le tableau de bord et la liste.
+**Verifications** : typecheck 0, build reussi, les deux etats repondent 200,
+captures conformes, lint 0 erreur, aucune primitive de couleur.
 
-**Non tranche** : le `Select` garde un fond clair en sombre sur la fiche
-partenaire. Contraste correct, comportement peut-etre voulu pour un champ de
-formulaire. A decider.
+**L'etat vide n'a pas de route de demonstration** : il est deja visible sur la
+moderation quand la file se vide, et la maquette le montre sur la liste
+d'evenements, ecran qui vise `apps/partner`.
 
 ## 2. Lots termines
 
@@ -86,11 +88,9 @@ Perimetre `apps/console` = Console Maitre.
 
 - **Lot CSM-5**, vue « en tant que » : bandeau persistant en lecture seule,
   touche le shell.
-- **Lot Etats systeme**, ecran 9, gabarits vide, erreur, skeletons.
 - **Reactivation d'une Organisation**, ecran 11 : meme motif inverse,
   confirmation simple sans saisie.
 - **CSM-5**, vue « en tant que » : bandeau persistant en lecture seule.
-- **Lot Etats systeme**, ecran 9, gabarits vide, erreur, skeletons.
 
 Ecrans 2 a 8 : cible `apps/partner`, application absente de ce depot. Hors perimetre.
 
