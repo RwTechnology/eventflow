@@ -13,6 +13,7 @@ import {
 import { PlanMeter } from '@rwtechnology/eventflow-design-system/plan-meter';
 import { Select } from '@rwtechnology/eventflow-design-system/select';
 import { StatusBadge } from '@rwtechnology/eventflow-design-system/status-badge';
+import { SuspendOrganization } from './suspend-organization';
 
 // PartnerDetail — fiche Organisation de la Console Maître (CdC CSM-2).
 // Composée à 100 % depuis le design system publié (RG-1).
@@ -52,6 +53,15 @@ const ORGANIZATION = {
     { label: 'Événements actifs', used: 2, limit: 2 },
     { label: 'Réservations / événement (max constaté)', used: 50, limit: 50 },
     { label: 'Agents / événement', used: 1, limit: 1 },
+  ],
+  // Conséquences chiffrées de la suspension (maquette écran 11).
+  suspendSummary:
+    'Dépublie immédiatement ses 2 événements actifs, bloque l’accès à sa console et gèle les réservations. Les visiteurs déjà inscrits sont notifiés. Réversible.',
+  suspendConsequences: [
+    '2 événements actifs dépubliés — « Nuit électro » (374 réservations) et « Sunset session » (94).',
+    '468 visiteurs inscrits notifiés par e-mail.',
+    'L’accès du propriétaire à sa console est bloqué (lecture seule).',
+    'Réactivation possible à tout moment depuis cette fiche.',
   ],
 };
 
@@ -182,6 +192,14 @@ export function PartnerDetail({ slug }: PartnerDetailProps) {
           </Card>
         </div>
       </div>
+
+      {/* Zone sensible : les conséquences sont chiffrées avant même la modale. */}
+      <SuspendOrganization
+        name={o.name}
+        slug={o.slug}
+        summary={o.suspendSummary}
+        consequences={o.suspendConsequences}
+      />
     </div>
   );
 }

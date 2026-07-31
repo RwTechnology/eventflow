@@ -16,30 +16,27 @@ n'est possible. Point clos, ne pas rouvrir.
 
 ## 1. Lot courant
 
-**Lot 11b, fiche Organisation TERMINE (CSM-2). En attente de validation.**
+**Lot 11c, suspension TERMINE (CSM-2). En attente de validation.**
 
-Route `/partenaires/[slug]` rendue dans l'application reelle. `0.1.9` installee,
-typecheck 0 erreur, `npm run build -w apps/console` **reussi** (6 routes,
-`/partenaires/[slug]` en dynamique), capture comparee a
-`backoffice/pages/partenaires.html`, vue fiche : en-tete avec identite, plan-tag
-et statut, bloc Activite en 6 paires cle/valeur, 3 `PlanMeter` du plan Free tous
-en warning a leur limite, bloc de changement de plan avec sa note. Conforme.
+Zone sensible et modale de confirmation ajoutees a la fiche Organisation.
+Typecheck 0 erreur, `npm run build -w apps/console` **reussi** (6 routes).
 
-`PlanMeter` cree dans le design system et publie en `0.1.9` (lot R du RUNDOC
-design system). Les lignes de la liste menent desormais a la fiche.
+Comportement verifie par sonde DOM, pas seulement par capture :
+`disabledInitial=true`, `disabledWrong=true`, `disabledExact=false`. Le bouton
+danger ne s'active qu'a la saisie exacte du slug, comme l'exige la maquette.
 
-Deux ecarts constates a la premiere capture et corriges **dans le consommateur** :
-- boutons d'en-tete desalignes, icone soulignee : l'icone etait passee en enfant
-  alors que `Button` expose `leftIcon`, qui gere espacement et alignement ;
-- premiere ligne d'Activite repliee sur deux lignes : `flex-wrap` remplace par un
-  libelle non retrecissable et une valeur alignee a droite.
+Captures comparees a `backoffice/pages/partenaires.html` : zone sensible avec son
+resume chiffre avant ouverture, modale avec titre, 4 consequences chiffrees,
+champ de confirmation et bouton danger desactive. Conforme.
 
-**Hors perimetre de ce lot, a traiter ensuite** :
-- **Lot 11c** : zone sensible, modale de suspension avec confirmation par saisie
-  du slug, reactivation.
-- **CSM-5**, vue « en tant que » : le bouton est present mais non cable ; le
-  bandeau persistant touche le shell, pas cette page.
-- Le changement de plan est presente, non applique : il passera par l'API (CSM-2).
+Aucun composant crée ni corrigé dans le design system : `Modal`, `Field`,
+`Input`, `Button` suffisaient.
+
+La suspension n'est pas appliquee : `SuspendOrganization` remonte l'intention par
+`onConfirm`, non cable. Backend = chantier separe (CdC §9.4).
+
+**Reste sur l'ecran 11** : reactivation (meme motif inverse, confirmation simple
+sans saisie) et vue « en tant que » (CSM-5, touche le shell).
 
 ## 2. Lots termines
 
@@ -62,15 +59,13 @@ Deux ecarts constates a la premiere capture et corriges **dans le consommateur**
   aux statuts d'Organisation, route `/partenaires`. `0.1.8`.
 - **Lot 11b, fiche Organisation** (2026-07-31, CSM-2). `PlanMeter` cree, route
   `/partenaires/[slug]`. `0.1.9`.
+- **Lot 11c, suspension** (2026-07-31, CSM-2). Zone sensible et modale de
+  confirmation par saisie du slug. Aucune intervention design system.
 
 ## 3. Lots restants
 
 Perimetre `apps/console` = Console Maitre.
 
-- **Lot 11c, suspension**, ecran 11, exigence CSM-2. **Prochain lot.** Zone
-  sensible avec consequences chiffrees, modale de confirmation par saisie du
-  slug, reactivation. Tous les composants existent (`Modal`, `Input`, `Button`,
-  `Alert`) : aucune intervention design system prevue.
 - **Lot CSM-5**, vue « en tant que » : bandeau persistant en lecture seule,
   touche le shell.
 - **Lot Moderation**, ecran 12, exigence CSM-3.
@@ -205,6 +200,16 @@ ete traites.
 | Aucun composant ecrit dans `apps/console` | regle 1, tenue depuis le lot Auth |
 
 ## 10. Journal
+
+### 2026-07-31, lot 11c, suspension (CSM-2) clos
+- **NOUVEAU** `packages/shell/suspend-organization.tsx` : zone sensible + modale.
+  Saisie repartie a zero a chaque ouverture ; une confirmation ne se pre-remplit pas.
+- `partner-detail.tsx` : zone sensible montee avec ses consequences chiffrees.
+- **Verification du comportement par sonde DOM** : `disabledInitial=true`,
+  `disabledWrong=true`, `disabledExact=false`. La porte du slug fonctionne.
+- Sondes servies depuis `apps/console/public/` pour contourner la restriction
+  cross-origin, puis **supprimees** avec le repertoire.
+- Typecheck 0, build reussi 6 routes, captures conformes.
 
 ### 2026-07-31, lot 11b, fiche Organisation (CSM-2) clos
 - Design system : **PlanMeter** cree (libelle, ratio mono, barre fine, warning a
