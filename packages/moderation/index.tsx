@@ -11,7 +11,7 @@ const PENDING_REPORTS = 3;
 
 function NavCount({ children }: { children: React.ReactNode }) {
   return (
-    <span className="rounded-sm bg-gray-100 px-1.5 font-mono text-xs text-gray-700">
+    <span className="rounded-sm bg-surface-raised px-1.5 font-mono text-xs text-text-secondary">
       {children}
     </span>
   );

@@ -138,10 +138,10 @@ function QueueItem({
         'relative w-full border-b border-border px-4 py-3 text-left',
         'transition-colors duration-fast ease-out',
         'focus-visible:outline-none focus-visible:ring focus-visible:ring-focus',
-        // Selection : fond primary-50 + lisere gauche (maquette ecran 12).
+        // Selection : role semantique (remappe en sombre) + lisere gauche.
         selected
-          ? 'bg-primary-50 before:absolute before:inset-y-0 before:left-0 before:w-[3px] before:bg-primary-600 before:content-[""]'
-          : 'hover:bg-primary-50',
+          ? 'bg-surface-selected/60 before:absolute before:inset-y-0 before:left-0 before:w-[3px] before:bg-primary-600 before:content-[""]'
+          : 'hover:bg-surface-selected/60',
         settled ? 'opacity-55' : '',
       ].join(' ')}
     >

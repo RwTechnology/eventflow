@@ -16,31 +16,36 @@ n'est possible. Point clos, ne pas rouvrir.
 
 ## 1. Lot courant
 
-**Passe theme sombre et responsive TERMINEE. Un defaut trouve et corrige.**
+**Passe theme sombre : deux defauts trouves et corriges.**
 
-Premiere verification du theme sombre et du responsive sur les pages livrees.
-C'etait le trou de verification le plus ancien du projet : toutes les captures
-precedentes etaient en clair, a 1440 px.
+La capture de la moderation en sombre a revele un defaut du design system que
+j'avais moi-meme reproduit dans trois fichiers.
 
-**Theme sombre : conforme.** Capture sur le tableau de bord et l'audit. Surfaces,
-cartes, graphe, badges, tables remappent correctement. Lisere ambre et badge
-maitre presents.
+`Sidebar` utilisait `bg-primary-50` et `text-primary-700` : des **primitives**,
+identiques dans les deux themes. En sombre l'item actif gardait un fond pale qui
+avalait son propre libelle. La maquette remappe explicitement
+(`shell.css` : `primary-900` a 60 % sur transparent, texte `primary-300`).
 
-**Responsive : conforme apres correctif.** A 390 px la sidebar passe en burger et
-les tuiles se rangent en 2x2, conforme a la maquette.
+**Corrige dans le design system** : trois roles semantiques avec leur mapping
+sombre, `surface-raised`, `surface-selected`, `text-selected`. `Sidebar` les
+utilise. Publie en `0.1.12`, puis `0.1.13` pour l'opacite a 60 % conforme a la
+maquette.
 
-**Defaut trouve** : `DataTable` ecrasait ses colonnes au lieu de defiler. Le
-conteneur portait bien `overflow-x-auto`, mais la table n'etait que `w-full` :
-rien ne declenchait le debordement, et 4 colonnes devenaient inatteignables.
-Corrige dans le design system par un seuil `min-w-table` adosse a un token,
-publie en `0.1.11`. Mesure apres correctif : table 911 px dans un conteneur de
-342 px, `canScroll=true`, colonnes atteintes par defilement.
+**Corrige dans mes modules** : compteurs de nav de `partner` et `moderation`,
+item selectionne de la file de moderation. Plus aucune primitive de couleur dans
+le code des modules.
 
-Trois ecrans livres avaient une table inutilisable sur mobile, jamais vue faute
-de capture sous 1440 px.
+**Verifie apres install de `0.1.12`** : item actif lisible en sombre, compteurs
+remappes. L'ajustement d'opacite `0.1.13` **n'est pas encore installe**, donc pas
+verifie visuellement.
 
-**Non traite** : deux avertissements NextAuth (`NEXTAUTH_URL`, `NO_SECRET`)
-absents de l'environnement. Sans effet tant que l'auth n'est pas cablee.
+**Erreur de diagnostic en cours de route** : j'ai d'abord conclu que la page
+rendait en clair malgre `data-theme='dark'`. Faux — une sonde des couleurs
+calculees donnait `cardBg=rgb(22, 27, 44)`, la surface sombre. Ce que je prenais
+pour une carte claire etait l'encart ambre de citation, correct dans les deux
+themes.
+
+**Pages encore jamais capturees en sombre** : fiche partenaire, login.
 
 ## 2. Lots termines
 
