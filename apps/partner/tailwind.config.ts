@@ -1,9 +1,7 @@
 import type { Config } from 'tailwindcss';
-import { efPreset } from '{{ns}}/shell/tailwind-preset';
+import { efPreset } from '@ef/shell/tailwind-preset';
 import dsPreset from '@rwtechnology/eventflow-design-system/preset';
 
-// Deux presets fusionnés : celui du design system publié (tokens, couleurs,
-// typo, motion) puis le preset infra local.
 // content globs SCOPÉS aux seuls packages embarqués (P14) : le CSS de cette
 // app n'inclut jamais les classes d'un module non embarqué.
 // Ajouter une ligne '../../packages/<id>/**/*.{ts,tsx}' par module branché.
@@ -12,8 +10,7 @@ const config: Config = {
   content: [
     './app/**/*.{ts,tsx}',
     '../../packages/shell/**/*.{ts,tsx}',
-    // Le dist du design system doit être scanné : ses classes utilitaires
-    // ne sont générées que si Tailwind les voit.
+    '../../packages/partner-dashboard/**/*.{ts,tsx}',
     '../../node_modules/@rwtechnology/eventflow-design-system/dist/**/*.js',
   ],
 };

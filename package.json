@@ -10,7 +10,7 @@
     "build": "npm run build:console",
     "build:console": "npm run build -w apps/console",
     "dev:console": "npm run dev -w apps/console",
-    "scaffold:all": "node scripts/scaffold-routes.mjs apps/console",
+    "scaffold:all": "node scripts/scaffold-routes.mjs apps/console && node scripts/scaffold-routes.mjs apps/partner",
     "gen": "plop",
     "gen:module": "plop module",
     "gen:app": "plop app",

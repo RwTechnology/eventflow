@@ -1,6 +1,7 @@
 // @ef/shell — infra partagée : layout/shell, nav, providers, login, proxy, theme.
 export { AppShellLayout } from './app-shell-layout';
 export { MasterShell, type MasterShellProps } from './master-shell';
+export { PartnerShell, type PartnerShellProps } from './partner-shell';
 export { useModuleNav } from './use-module-nav';
 export {
   ImpersonationBanner,

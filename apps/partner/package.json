@@ -1,0 +1,20 @@
+{
+  "name": "partner",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "predev": "npm run scaffold",
+    "prebuild": "npm run scaffold",
+    "scaffold": "node ../../scripts/scaffold-routes.mjs apps/partner",
+    "dev": "next dev -p 3100",
+    "build": "next build",
+    "start": "next start -p 3100"
+  },
+  "dependencies": {
+    "@ef/auth": "*",
+    "@ef/module-kit": "*",
+    "@ef/partner-dashboard": "*",
+    "@ef/shell": "*",
+    "@rwtechnology/eventflow-design-system": "^0.1.14"
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "brand": "EventFlow Partenaire",
+  "modules": [
+    "@ef/partner-dashboard"
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "id": "partner-dashboard",
+  "package": "@ef/partner-dashboard",
+  "basePath": "(app)/partner-console",
+  "routes": [
+    { "route": "page.tsx", "module": "dashboard-page" }
+  ]
+}

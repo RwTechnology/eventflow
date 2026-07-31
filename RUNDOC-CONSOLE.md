@@ -16,31 +16,40 @@ n'est possible. Point clos, ne pas rouvrir.
 
 ## 1. Lot courant
 
-**CSM-5, vue « en tant que » TERMINEE. Perimetre CSM-1 a CSM-5 complet.**
+**`apps/partner` creee, ecran 3 livre. En attente de validation.**
 
-`ImpersonationBanner` dans `@ef/shell` : bandeau ambre persistant, au-dessus de
-tout, lisere maitre compris. « Vous consultez la console de X en lecture seule »
-plus une action Quitter. Il ne se ferme pas, il se quitte : c'est le seul repere
-qui distingue « je regarde le compte de X » de « je suis X ».
+Deuxieme application du monorepo, conforme au cahier des charges (§9.2) qui la
+nomme `apps/partner`. Ses routes portent le prefixe `partner-console`, par
+symetrie avec `master-console`.
 
-Le bouton de la fiche Organisation pointe vers `?en-tant-que=<nom>` ; la coquille
-lit l'URL cote client, un layout ne recevant pas `searchParams` en Next.
+Squelette pose par `npm run gen:app`, 16 fichiers. Port 3100.
 
-**Deux pieges rencontres, tous deux corriges** :
-- `useSearchParams` **casse le prerendu statique** de toute page qui l'appelle :
-  le build echouait sur `/master-console/audit`. Isole dans un composant sous
-  `Suspense`, seul ce fragment devient dynamique et les 3 routes statiques le
-  restent.
-- `asChild` du `Button` passe par Radix Slot, qui exige un enfant unique :
-  combine a `leftIcon` il ne rendait aucun lien. Le `Link` enveloppe le bouton
-  plutot que l'inverse.
+**`PartnerShell` dans `@ef/shell`** : le **meme `AppShell`** que la Console
+Maitre, sans la prop `master`. La maquette impose une seule coquille pour les
+deux consoles ; ce qui distingue le partenaire, c'est ce que le maitre n'a pas
+(selecteur d'Organisation en haut, profil en bas) et l'absence du lisere et du
+badge maitre.
 
-**Verifications** : typecheck 0, build reussi 6 routes dont 3 statiques, les 2
-etats repondent 200, capture conforme, lien verifie par sonde DOM
-(`href=?en-tant-que=...`), lint 0 erreur.
+**Module `@ef/partner-dashboard`** (PTN-1) : 4 tuiles, tendance 7 jours,
+GateBanner de la limite Free (PTN-11). Route `/partner-console`.
 
-**Le perimetre fonctionnel de la Console Maitre est couvert** : CSM-1 a CSM-5,
-plus les etats transverses de l'ecran 9.
+**Trois manques du generateur, corriges dans les templates** pour que la
+prochaine app n'ait pas le probleme :
+- `globals.css` n'importait ni les tokens ni les styles du design system ;
+- `tailwind.config.ts` n'avait ni le preset du design system ni le glob de son
+  `dist` ;
+- `package.json` ne declarait pas le design system en dependance.
+
+Sans ces trois, la page rendait en HTML brut : barres noires, textes non stylees.
+Constate par capture, corrige, recapture conforme.
+
+`scaffold:all` couvrait seulement `apps/console` ; il couvre desormais les deux.
+
+**Verifications** : typecheck 0 sur les 2 apps, les 2 builds reussissent, les 3
+routes partner repondent (`/` en 307), capture conforme, lint 0 erreur.
+
+**Reste sur `apps/partner`** : ecrans 4 a 8 (liste des evenements, creation en
+5 etapes, detail en 5 onglets, page Plan, etats de gating).
 
 ## 2. Lots termines
 
