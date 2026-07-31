@@ -16,7 +16,34 @@ n'est possible. Point clos, ne pas rouvrir.
 
 ## 1. Lot courant
 
-**Lot 11a, liste des partenaires TERMINE (CSM-2). En attente de validation.**
+**Lot 11b, fiche Organisation TERMINE (CSM-2). En attente de validation.**
+
+Route `/partenaires/[slug]` rendue dans l'application reelle. `0.1.9` installee,
+typecheck 0 erreur, `npm run build -w apps/console` **reussi** (6 routes,
+`/partenaires/[slug]` en dynamique), capture comparee a
+`backoffice/pages/partenaires.html`, vue fiche : en-tete avec identite, plan-tag
+et statut, bloc Activite en 6 paires cle/valeur, 3 `PlanMeter` du plan Free tous
+en warning a leur limite, bloc de changement de plan avec sa note. Conforme.
+
+`PlanMeter` cree dans le design system et publie en `0.1.9` (lot R du RUNDOC
+design system). Les lignes de la liste menent desormais a la fiche.
+
+Deux ecarts constates a la premiere capture et corriges **dans le consommateur** :
+- boutons d'en-tete desalignes, icone soulignee : l'icone etait passee en enfant
+  alors que `Button` expose `leftIcon`, qui gere espacement et alignement ;
+- premiere ligne d'Activite repliee sur deux lignes : `flex-wrap` remplace par un
+  libelle non retrecissable et une valeur alignee a droite.
+
+**Hors perimetre de ce lot, a traiter ensuite** :
+- **Lot 11c** : zone sensible, modale de suspension avec confirmation par saisie
+  du slug, reactivation.
+- **CSM-5**, vue « en tant que » : le bouton est present mais non cable ; le
+  bandeau persistant touche le shell, pas cette page.
+- Le changement de plan est presente, non applique : il passera par l'API (CSM-2).
+
+## 1bis. Lot precedent
+
+**Lot 11a, liste des partenaires TERMINE (CSM-2).**
 
 Route `/partenaires` rendue dans l'application reelle. `0.1.8` installee,
 typecheck 0 erreur, `npm run build -w apps/console` **reussi** (5 routes,
@@ -105,10 +132,15 @@ Aucun composant ecrit dans `apps/console` : la coquille vit dans
 
 Perimetre `apps/console` = Console Maitre.
 
-- **Lot 11b, fiche Organisation**, ecran 11, exigences CSM-2 et CSM-5.
-  **Prochain lot.** Routes `/partenaires/[slug]`, modale de suspension avec
-  confirmation par saisie du slug, vue « en tant que ». Necessite **PlanMeter**
-  a creer dans le design system (3 jauges de consommation du plan).
+- **Lot 11c, suspension**, ecran 11, exigence CSM-2. **Prochain lot.** Zone
+  sensible avec consequences chiffrees, modale de confirmation par saisie du
+  slug, reactivation. Tous les composants existent (`Modal`, `Input`, `Button`,
+  `Alert`) : aucune intervention design system prevue.
+- **Lot CSM-5**, vue « en tant que » : bandeau persistant en lecture seule,
+  touche le shell.
+- **Lot Moderation**, ecran 12, exigence CSM-3.
+- **Lot Audit**, ecran 13, exigence CSM-4.
+- **Lot Etats systeme**, ecran 9, gabarits vide, erreur, skeletons.
 - **Lot Partenaires**, ecran 11, exigences CSM-2 et CSM-5.
 - **Lot Moderation**, ecran 12, exigence CSM-3.
 - **Lot Audit**, ecran 13, exigence CSM-4.
@@ -242,6 +274,21 @@ ete traites.
 | Aucun composant ecrit dans `apps/console` | regle 1, tenue depuis le lot Auth |
 
 ## 10. Journal
+
+### 2026-07-31, lot 11b, fiche Organisation (CSM-2) clos
+- Design system : **PlanMeter** cree (libelle, ratio mono, barre fine, warning a
+  la limite, pas de barre si limite nulle). Distinct de `CapacityGauge` qui mesure
+  des places d'evenement. 139 tests, publie `v0.1.9`.
+- **NOUVEAU** `packages/shell/partner-detail.tsx` : en-tete, Activite, 3
+  PlanMeter, changement de plan.
+- **NOUVEAU** `apps/console/app/(app)/partenaires/[slug]/page.tsx` : monte la
+  fiche, `params` awaite (Next 16).
+- `partners-list.tsx` : lignes cliquables vers la fiche.
+- Plages alignees sur `^0.1.9`.
+- **Verifications reelles** : typecheck **0 erreur** ; build **reussi**, 6 routes ;
+  capture conforme apres 2 corrections d'appel ; slug inconnu rend un message
+  explicite plutot que les donnees d'une autre Organisation.
+- `npm run lint` : seule erreur preexistante dans `auth-page.tsx`.
 
 ### 2026-07-31, lot 11a, liste des partenaires (CSM-2) clos
 - Design system : `StatusBadge` etendu (`OrganizationStatus`, `EntityStatus`),

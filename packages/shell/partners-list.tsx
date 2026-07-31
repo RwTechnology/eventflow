@@ -1,6 +1,7 @@
 'use client';
 
 import * as React from 'react';
+import Link from 'next/link';
 import { Search } from 'lucide-react';
 import { Avatar } from '@rwtechnology/eventflow-design-system/avatar';
 import { Badge } from '@rwtechnology/eventflow-design-system/badge';
@@ -145,7 +146,13 @@ const columns: ColumnDef<Organization, unknown>[] = [
         <div className="flex items-center gap-3">
           <Avatar name={o.name} fallback={o.initials} size="sm" />
           <div className="min-w-0">
-            <p className="truncate font-semibold text-text-primary">{o.name}</p>
+            {/* La ligne mène à la fiche Organisation (maquette écran 11). */}
+            <Link
+              href={`/partenaires/${o.slug}`}
+              className="truncate font-semibold text-text-primary hover:text-primary-700 hover:underline"
+            >
+              {o.name}
+            </Link>
             <p className="truncate text-xs text-text-secondary">
               {o.city} · {o.descriptor}
               {o.flagged ? (

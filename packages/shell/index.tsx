@@ -3,6 +3,7 @@ export { AppShellLayout } from './app-shell-layout';
 export { MasterShell, type MasterShellProps } from './master-shell';
 export { PlatformDashboard } from './platform-dashboard';
 export { PartnersList } from './partners-list';
+export { PartnerDetail, type PartnerDetailProps } from './partner-detail';
 export { ModuleNav } from './nav-config';
 export { Providers } from './providers';
 export { LoginForm } from './login-form';
