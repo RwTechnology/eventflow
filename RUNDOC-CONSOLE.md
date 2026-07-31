@@ -16,27 +16,27 @@ n'est possible. Point clos, ne pas rouvrir.
 
 ## 1. Lot courant
 
-**Lot Audit TERMINE (CSM-4). Dernier ecran de la Console Maitre.**
+**Nav derivee du registry TERMINEE. Dernier ecart architectural comble.**
 
-Route `/audit` rendue dans l'application reelle. Typecheck 0 erreur, build reussi
-(8 routes), captures comparees a `backoffice/pages/audit.html` : 4 filtres
-combinables, horodatage mono a la seconde, act-tags colores avec icone et
-libelle, entite en gras + identifiant lisible, pied de volumetrie mono. Panneau
-lateral avec en-tete act-tag + identifiant, 5 lignes cle/valeur, diff rouge/vert
-en mono, pied « Copier l'entree (JSON) ». Conforme.
+`MasterShell` ne code plus aucun libelle ni aucune route : la nav vient du
+registry de modules (P8). Chaque module declare sa section via `useNavSection` ;
+`useModuleNav` les collecte dans l'ordre du registry et **fusionne les sections
+de meme eyebrow**, ce que la maquette exige (Plateforme et Partenaires sous
+« Plateforme », Moderation et Audit sous « Controle »).
 
-**`SidePanel` cree dans le design system** et publie en `0.1.10` : `Modal` est
-centre et assombrit a 50 %, l'ecran 13 exige un panneau ancre a droite avec un
-overlay leger pour garder la table lisible.
+Les compteurs 128 et 3 sont passes dans les modules qui possedent la donnee :
+`NavItem` gagne une prop `trailing` dans `@ef/module-kit`. La coquille ne connait
+plus ces chiffres.
 
-Nouveau module **`@ef/audit`**. Les 5 plages de version sont alignees sur `^0.1.10`.
+Consequence : ajouter un module a `modules.json` suffit desormais a le faire
+apparaitre dans la nav, sans toucher au shell.
 
-**Non cable** : pagination serveur, synchronisation des filtres dans l'URL,
-copie JSON, selection au clavier.
+**Verifications** : typecheck 0, build reussi 8 routes, les 4 routes repondent
+200, capture identique a l'etat precedent (2 eyebrows, compteurs, marqueur
+actif). Aucun libelle metier ne subsiste dans le code du shell.
 
-**Les 4 items de nav ont desormais leur module.** La nav de `MasterShell` reste
-codee en dur : elle peut maintenant deriver du registry, comme dans
-`cp-admin-console`. C'est le dernier ecart avec l'architecture de reference.
+**Architecture alignee sur `cp-admin-console`** : modules metier autonomes,
+routes generees depuis les manifestes, nav data-driven, shell reduit a l'infra.
 
 ## 2. Lots termines
 
@@ -67,6 +67,8 @@ codee en dur : elle peut maintenant deriver du registry, comme dans
   maitre-detail et modale de depublication. Aucune intervention design system.
 - **Lot Audit** (2026-07-31, CSM-4). Module `@ef/audit`, journal filtrable et
   panneau de detail. `SidePanel` cree dans le design system, `0.1.10`.
+- **Nav derivee du registry** (2026-07-31). `MasterShell` consomme
+  `useNavSection` de chaque module ; compteurs deplaces dans les modules.
 
 ## 3. Lots restants
 
@@ -74,8 +76,10 @@ Perimetre `apps/console` = Console Maitre.
 
 - **Lot CSM-5**, vue « en tant que » : bandeau persistant en lecture seule,
   touche le shell.
-- **Derivation de la nav depuis le registry**. **Prochain lot possible.** Les 4
-  modules exposent leur `useNavSection` ; `MasterShell` ne les consomme pas encore.
+- **Lot Etats systeme**, ecran 9, gabarits vide, erreur, skeletons.
+- **Reactivation d'une Organisation**, ecran 11 : meme motif inverse,
+  confirmation simple sans saisie.
+- **CSM-5**, vue « en tant que » : bandeau persistant en lecture seule.
 - **Lot Etats systeme**, ecran 9, gabarits vide, erreur, skeletons.
 
 Ecrans 2 a 8 : cible `apps/partner`, application absente de ce depot. Hors perimetre.

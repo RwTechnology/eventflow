@@ -1,6 +1,7 @@
 // @ef/shell — infra partagée : layout/shell, nav, providers, login, proxy, theme.
 export { AppShellLayout } from './app-shell-layout';
 export { MasterShell, type MasterShellProps } from './master-shell';
+export { useModuleNav } from './use-module-nav';
 export { ModuleNav } from './nav-config';
 export { Providers } from './providers';
 export { LoginForm } from './login-form';

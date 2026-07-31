@@ -7,6 +7,11 @@ export interface NavItem {
   href: string;
   label: string;
   icon?: ReactNode;
+  /**
+   * Contenu affiché en fin de ligne : compteur, badge. Le module le fournit
+   * lui-même, c'est lui qui connaît la donnée (ex. signalements en attente).
+   */
+  trailing?: ReactNode;
 }
 
 export interface NavSection {
