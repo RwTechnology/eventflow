@@ -16,34 +16,34 @@ n'est possible. Point clos, ne pas rouvrir.
 
 ## 1. Lot courant
 
-**Prefixe `/master-console` TERMINE. En attente de validation.**
+**Reactivation d'une Organisation TERMINEE. Ecran 11 clos.**
 
-Les 5 routes de la Console Maitre passent sous `/master-console` :
+`SuspendOrganization` gagne un mode `suspended` : la zone bascule sur la
+reactivation plutot que d'ouvrir un second composant. Motif inverse, conforme a
+la maquette.
 
-| Avant | Apres |
-|---|---|
-| `/` | `/master-console` |
-| `/partenaires` | `/master-console/partenaires` |
-| `/partenaires/[slug]` | `/master-console/partenaires/[slug]` |
-| `/moderation` | `/master-console/moderation` |
-| `/audit` | `/master-console/audit` |
+| | Suspension | Reactivation |
+|---|---|---|
+| Zone | bordure danger, fond rouge | bordure neutre, fond attenue |
+| Bouton | `danger` « Suspendre » | `secondary` « Reactiver » |
+| Confirmation | **saisie exacte du slug** | simple clic |
+| Consequences | 4 lignes chiffrees | 3 lignes de retour a l'etat anterieur |
 
-Change dans les **manifestes** (`basePath`) et les **modules** (`routePrefix` +
-`href` de nav), jamais dans l'app : `npm run scaffold:all` a regenere les 5
-routes et supprime les 5 anciennes. La nav a suivi seule, puisqu'elle derive du
-registry.
+La friction reste sur l'action destructrice seulement : on ne demande pas de
+saisir un slug pour revenir en arriere.
 
-`apps/console/app/page.tsx` recree : la racine redirige vers le `routePrefix` du
-premier module, donc vers `/master-console`. Sans module embarque, elle retombe
-sur `/login`.
+Declenchement par `?etat=suspendu`, meme convention que le login et le tableau
+de bord. L'etat reel viendra de l'API (CdC §9.4).
 
-**Verifications** : typecheck 0, build reussi 6 routes, les 5 routes repondent
-200, `/` redirige en 307, rendu et nav inchanges, lint 0 erreur, aucun lien non
-prefixe.
+**Comportement verifie par sonde DOM, pas seulement par capture** :
+- reactivation : `champSlug=false`, `confirmActif=true` ;
+- suspension : `champSlug=true`, `confirmDesactive=true`, aucune regression.
 
-**Ecart assume avec la maquette** : `Etape 0 - Plan consoles.html` place la
-Console Maitre a la racine de `apps/console`, c'est elle l'application. Le
-prefixe est un choix explicite de l'utilisateur, hors maquette.
+**Verifications** : typecheck 0, build reussi 6 routes, les 2 etats repondent
+200, capture conforme, lint 0 erreur.
+
+**Il ne reste que CSM-5** : vue « en tant que », bandeau persistant en lecture
+seule. Le bouton existe sur la fiche, non cable ; le bandeau touche le shell.
 
 ## 2. Lots termines
 
@@ -83,8 +83,6 @@ prefixe est un choix explicite de l'utilisateur, hors maquette.
 
 Perimetre `apps/console` = Console Maitre.
 
-- **Reactivation d'une Organisation**, ecran 11 : meme motif inverse que la
-  suspension, confirmation simple sans saisie du slug.
 - **CSM-5, vue « en tant que »** : bandeau persistant en lecture seule. Le bouton
   existe sur la fiche Organisation, non cable ; le bandeau touche le shell.
 

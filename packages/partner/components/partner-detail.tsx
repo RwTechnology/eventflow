@@ -29,6 +29,12 @@ import { SuspendOrganization } from './suspend-organization';
 export interface PartnerDetailProps {
   /** Slug de l'Organisation. Le jeu fictif n'en contient qu'une. */
   slug?: string;
+  /**
+   * Etat de demonstration : `suspendu` bascule la zone sensible sur la
+   * reactivation. Le backend est un chantier separe (CdC §9.4), l'etat reel
+   * viendra de l'API.
+   */
+  demoEtat?: 'suspendu';
 }
 
 const ORGANIZATION = {
@@ -63,6 +69,13 @@ const ORGANIZATION = {
     'L’accès du propriétaire à sa console est bloqué (lecture seule).',
     'Réactivation possible à tout moment depuis cette fiche.',
   ],
+  reactivateSummary:
+    'Republie ses événements dans l’état où ils étaient, rend l’accès à la console et réactive les réservations en attente.',
+  reactivateConsequences: [
+    '2 événements republiés dans leur état antérieur.',
+    'L’accès du propriétaire à sa console est rétabli.',
+    'Les réservations en suspens redeviennent actives.',
+  ],
 };
 
 /** Ligne clé/valeur du bloc Activité : libellé à gauche, valeur mono à droite. */
@@ -75,8 +88,9 @@ function KeyValue({ label, value }: { label: string; value: string }) {
   );
 }
 
-export function PartnerDetail({ slug }: PartnerDetailProps) {
+export function PartnerDetail({ slug, demoEtat }: PartnerDetailProps) {
   const o = ORGANIZATION;
+  const suspended = demoEtat === 'suspendu';
   const [plan, setPlan] = React.useState(o.plan);
 
   // Le jeu fictif ne porte qu'une Organisation : tout autre slug est signalé
@@ -104,7 +118,10 @@ export function PartnerDetail({ slug }: PartnerDetailProps) {
               <Badge tone="neutral" className="font-mono text-xs uppercase tracking-wider">
                 {o.plan}
               </Badge>
-              <StatusBadge status={o.status} />
+              <StatusBadge
+                status={suspended ? 'suspended' : o.status}
+                label={suspended ? 'Suspendue le 2 juil.' : undefined}
+              />
             </div>
             <p className="mt-1 text-sm text-text-secondary">
               {o.city} · {o.owner} · {o.since}
@@ -197,8 +214,9 @@ export function PartnerDetail({ slug }: PartnerDetailProps) {
       <SuspendOrganization
         name={o.name}
         slug={o.slug}
-        summary={o.suspendSummary}
-        consequences={o.suspendConsequences}
+        suspended={suspended}
+        summary={suspended ? o.reactivateSummary : o.suspendSummary}
+        consequences={suspended ? o.reactivateConsequences : o.suspendConsequences}
       />
     </div>
   );
