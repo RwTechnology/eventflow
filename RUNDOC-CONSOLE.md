@@ -83,51 +83,59 @@ prefixe est un choix explicite de l'utilisateur, hors maquette.
 
 Perimetre `apps/console` = Console Maitre.
 
-- **Lot CSM-5**, vue « en tant que » : bandeau persistant en lecture seule,
-  touche le shell.
-- **Reactivation d'une Organisation**, ecran 11 : meme motif inverse,
-  confirmation simple sans saisie.
-- **CSM-5**, vue « en tant que » : bandeau persistant en lecture seule.
+- **Reactivation d'une Organisation**, ecran 11 : meme motif inverse que la
+  suspension, confirmation simple sans saisie du slug.
+- **CSM-5, vue « en tant que »** : bandeau persistant en lecture seule. Le bouton
+  existe sur la fiche Organisation, non cable ; le bandeau touche le shell.
 
 Ecrans 2 a 8 : cible `apps/partner`, application absente de ce depot. Hors perimetre.
 
 ## 4. Etat des fichiers
 
-Aucun fichier en cours de modification. Les depots sont propres, tout est
-commite et pousse.
+Aucun fichier en cours de modification. Les depots sont propres.
 
 ### Routes de `apps/console`
 
+Les 5 routes sous `(app)/master-console/` sont **generees** depuis les manifestes
+(banniere `DO NOT EDIT`), regenerees par `predev` / `prebuild`.
+
 | Chemin | Role |
 |---|---|
-| `app/layout.tsx` | layout racine |
+| `app/layout.tsx` | layout racine, ecrit a la main |
 | `app/globals.css` | importe `tokens.css` et `styles.css` du design system |
-| `app/login/page.tsx` | monte `AuthPage` depuis `@ef/shell` |
-| `app/(app)/layout.tsx` | monte `MasterShell`, compteurs 128 et 3 |
-| `app/(app)/page.tsx` | tableau de bord plateforme, CSM-1 |
-| `app/(app)/partenaires/page.tsx` | liste des Organisations, CSM-2 |
-| `app/(app)/partenaires/[slug]/page.tsx` | fiche Organisation, CSM-2 |
+| `app/page.tsx` | redirige vers le `routePrefix` du premier module |
+| `app/login/page.tsx` | monte `AuthPage`, lit `?vue=` / `?etat=` |
+| `app/(app)/layout.tsx` | monte `MasterShell` avec le registry |
+| `app/(app)/master-console/page.tsx` | tableau de bord, CSM-1 |
+| `app/(app)/master-console/partenaires/page.tsx` | liste, CSM-2 |
+| `app/(app)/master-console/partenaires/[slug]/page.tsx` | fiche, CSM-2 |
+| `app/(app)/master-console/moderation/page.tsx` | moderation, CSM-3 |
+| `app/(app)/master-console/audit/page.tsx` | audit, CSM-4 |
 | `app/api/auth/[...nextauth]/route.ts` | route NextAuth |
 
-Aucune de ces routes ne definit de composant : chacune monte un corps de page
-venu de `@ef/shell` (P9).
+Aucune ne definit de composant : chacune monte un corps de page venu d'un
+module (P9).
 
-### Corps de page dans les modules metier
+### Modules metier
 
-| Chemin | Role |
-|---|---|
-| `packages/platform/components/platform-dashboard.tsx` | ecran 10 |
-| `packages/platform/pages/platform-page.tsx` | corps de la route `/` |
-| `packages/partner/components/partners-list.tsx` | ecran 11, vue liste |
-| `packages/partner/components/partner-detail.tsx` | ecran 11, vue fiche |
-| `packages/partner/components/suspend-organization.tsx` | zone sensible + modale |
-| `packages/partner/pages/*.tsx` | corps des routes `/partenaires` |
+| Module | Contenu | Exigence |
+|---|---|---|
+| `@ef/platform` | tableau de bord | CSM-1 |
+| `@ef/partner` | liste, fiche, suspension | CSM-2 |
+| `@ef/moderation` | file et modale de depublication | CSM-3 |
+| `@ef/audit` | journal filtrable et panneau de detail | CSM-4 |
+
+Chacun porte `components/`, `pages/`, `routes.manifest.json`, `next-config.ts` et
+exporte son `<id>Module`. Aucune dependance entre modules.
 
 ### Infrastructure dans `packages/shell`
 
 | Chemin | Role |
 |---|---|
-| `master-shell.tsx` | coquille Console Maitre, compose `AppShell` |
+| `master-shell.tsx` | coquille Maitre, nav derivee du registry |
+| `use-module-nav.ts` | collecte les sections, fusionne les eyebrows partages |
+| `stale-data-banner.tsx` | etat d'erreur, ecran 9 |
+| `dashboard-skeleton.tsx` | etat de chargement, ecran 9 |
 | `auth-page.tsx` | page d'auth |
 | `providers.tsx`, `theme-toggle.tsx`, `proxy.ts` | infra transverse |
 | `app-shell-layout.tsx` | coquille anterieure au design system, plus montee |
@@ -136,26 +144,28 @@ venu de `@ef/shell` (P9).
 
 | Chemin | Etat |
 |---|---|
-| `package.json` racine, `packages/shell/package.json` | tous deux en `^0.1.9` |
-| `apps/console/registry.ts`, `modules.json` | vides : la nav Maitre est portee par `MasterShell`, pas par le registry |
-| `apps/console/tailwind.config.ts` | presets design system puis interne |
+| `package.json` racine + les 5 packages | tous en `^0.1.14` |
+| `apps/console/registry.ts`, `modules.json` | 4 modules, ordre = ordre des eyebrows |
+| `apps/console/next.config.ts` | 4 contributions via `moduleConfigs` |
+| `apps/console/tailwind.config.ts` | globs des 5 packages + dist du design system |
 
 ## 5. Commandes de verification
 
-Sorties reelles du dernier lot (11b, 2026-07-31).
+Sorties reelles du 2026-07-31, apres le prefixe `/master-console`.
 
 | Commande | Resultat reel |
 |---|---|
 | `npx tsc -p apps/console --noEmit` | **0 erreur** |
 | `npm run build -w apps/console` | **reussi**, 6 routes |
-| `npm run lint` | 1 erreur preexistante, `packages/shell/auth-page.tsx:167` |
+| `npm run lint` | **0 erreur** |
 | design system : `npx tsc --noEmit` | 0 erreur |
-| design system : `npm test` | **139 tests**, 38 fichiers |
-| design system : `npm run build` | 25 composants client, `dist/preset.d.ts` present |
+| design system : `npm test` | **143 tests**, 40 fichiers |
+| design system : `npm run build` | 26 composants client, `dist/preset.d.ts` present |
 | design system : grep hex dans `src/components` | 0 |
-| version installee | `0.1.9`, plages racine et `packages/shell` alignees |
-| captures headless comparees aux rendus de maquette | ecrans 1, 10, 11 liste et fiche : conformes |
-| `npm run dev:console` | `/`, `/partenaires`, `/partenaires/[slug]`, `/login` : 200 |
+| version installee | `0.1.14`, les 6 plages alignees |
+| `npm run dev:console` | les 5 routes 200, `/` en 307 |
+| captures headless | ecrans 1, 9, 10, 11, 12, 13 conformes, clair et sombre |
+| responsive 390 px | tableau de bord et liste verifies |
 
 ## 6. Defauts ouverts
 
@@ -181,44 +191,56 @@ Sorties reelles du dernier lot (11b, 2026-07-31).
 ## 7. Statut de conformite des composants
 
 Etabli par comparaison story ou page rendue contre rendu de maquette, captures
-headless. Les polices `Inter` et `Space Mono` sont chargees depuis le reseau
-pendant les captures, constate par sonde `document.fonts`.
+headless en clair ET en sombre. Les polices `Inter` et `Space Mono` sont chargees
+depuis le reseau pendant les captures, constate par sonde `document.fonts`.
 
 | Composant | Statut | Note |
 |---|---|---|
-| `Card`, `DataTable`, `Avatar`, `Skeleton`, `EmptyState` | conformes | verifies par rendu, passe 1 |
-| `Sidebar` | **corrige**, `0.1.4` | marqueur actif en barre detachee 2 px, compteur renforce sur l'actif |
+| `Card`, `Avatar`, `Skeleton`, `EmptyState` | conformes | verifies par rendu |
+| `DataTable` | **corrige**, `0.1.11` | seuil `min-w-table` : defile sous 720 px au lieu d'ecraser ses colonnes |
+| `Sidebar` | **corrige**, `0.1.4` puis `0.1.12` et `0.1.13` | marqueur actif detache ; puis roles semantiques pour remapper en sombre, a 60 % conforme a la maquette |
 | `AppShell` | **corrige**, `0.1.4` | prop `master` : lisere warning 2 px, badge mono |
 | `StatusBadge` | **corrige**, `0.1.8` | `OrganizationStatus` ajoute, extension additive |
+| `AuthLayout` | **corrige**, `0.1.14` | le panneau formulaire fixe sa couleur de texte : sans elle, un titre sans classe etait invisible en sombre |
 | `StatCard` | **cree**, `0.1.5` | 4 tuiles de l'ecran 10 |
 | `TrendChart` | **cree**, `0.1.5` puis `0.1.6` | barres SVG pilotees par tokens, aucune librairie |
 | `PlanMeter` | **cree**, `0.1.9` | limite de plan, distinct de `CapacityGauge` |
-| `Badge` | **ecart ouvert** | les 6 badges de cycle de vie d'evenement (`draft live full done cancel archived`) ne sont pas couverts comme jeu nomme. Non requis par les ecrans livres ; le sera par les ecrans 4 et 6, cible `apps/partner`, hors perimetre de ce depot |
+| `SidePanel` | **cree**, `0.1.10` | panneau ancre a droite, overlay leger : `Modal` est centre et assombrit a 50 % |
+| `Badge` | **ecart ouvert** | les 6 badges de cycle de vie d'evenement ne sont pas couverts comme jeu nomme. Non requis par les ecrans livres ; le sera par les ecrans 4 et 6, cible `apps/partner` |
+| `Select` | **a trancher** | garde un fond clair en sombre. Contraste correct, comportement peut-etre voulu pour un champ de formulaire. Aucune reference dans la maquette |
 
 ## 8. Perimetre non couvert
 
 Distinct des defauts ouverts : ces points ne sont pas des defauts, ils n'ont pas
 ete traites.
 
-- **Ecrans 9, 12, 13** : aucun composant qualifie, hors lot.
 - **Ecrans 2 a 8** : cible `apps/partner`, application absente de ce depot.
 - **Backend** : aucun appel API. Toutes les pages rendent le jeu fictif du
-  prototype. Chantier separe (CdC §9.4, depot `eventflow-api`).
-- **Theme sombre et responsive** : verifies sur le tableau de bord, l'audit et la
-  liste des partenaires. Les autres pages n'ont pas ete capturees hors clair.
-- **Comportements non cables** : `signIn` sur `/login`, changement de plan sur la
-  fiche, bouton « Voir en tant que » (CSM-5).
+  prototype, cohererent d'un ecran a l'autre. Chantier separe (CdC §9.4, depot
+  `eventflow-api`).
+- **Comportements non cables** : `signIn` sur `/login` ; changement de plan et
+  bouton « Voir en tant que » sur la fiche ; rejeter et depublier en moderation
+  (retrait cote client seulement) ; pagination serveur, filtres dans l'URL,
+  copie JSON et selection clavier sur l'audit.
+- **Theme sombre** : verifie sur les 6 pages livrees plus les 2 vues du login.
+  **Responsive** : verifie a 390 px sur le tableau de bord et la liste seulement.
 
 ## 9. Decisions prises
 
+Decisions structurantes encore en vigueur. Les arbitrages ponctuels de
+publication sont dans le journal, pas ici.
+
 | Decision | Raison |
 |---|---|
-| `clean: false` sur le bloc 1 plus `prebuild` explicite | le `clean` du bloc 1 effacait le `preset.d.ts` du bloc 2 ; le nettoyage explicite conserve le comportement voulu sans la course entre blocs |
-| La presence de `preset.d.ts` est constatee par `ls`, pas par la ligne `DTS` de tsup | la ligne `DTS` s'etait deja revelee trompeuse : elle annonce l'emission, pas la survie du fichier |
-| Aucun tag `v0.1.3` cree | `publish.yml` execute `typecheck` avant `publish` ; avec 2 erreurs preexistantes la CI echouerait sans publier. Pousser un tag voue a l'echec serait un faux signal |
-| Plage racine non alignee dans cette passe | elle doit viser `^0.1.3`, version non encore publiee |
-| Les 2 erreurs de stories ne sont pas corrigees ici | le mandat interdit de modifier les composants et limite la passe au conflit `clean` ; la correction est proposee, pas appliquee |
-| Aucun composant ecrit dans `apps/console` | regle 1, tenue depuis le lot Auth |
+| Aucun composant ecrit dans `apps/console` | RG-1. Tout corps de page vit dans un module, l'app ne fait que monter |
+| Un composant non conforme se corrige dans le design system | RG-5. Un appel maladroit se corrige sur place ; la distinction se tranche en lisant le composant, pas en supposant |
+| Le metier vit dans des modules, pas dans `@ef/shell` | P2. `shell` porte ce qu'une autre app pourrait reutiliser : coquille, auth, theme, proxy |
+| Les routes se generent depuis les manifestes | elles portent `DO NOT EDIT` et se regenerent a chaque `predev` / `prebuild` |
+| La nav derive du registry | le shell ne connait aucun libelle ; ajouter un module a `modules.json` suffit a le faire apparaitre |
+| Couleurs par roles, jamais par primitives | une primitive est identique dans les deux themes ; seul un role remappe. 4 defauts de theme sombre venaient de cette confusion |
+| La presence d'un fichier de build se constate par `ls` | la ligne `DTS` de tsup annonce l'emission, pas la survie du fichier ; elle s'est revelee trompeuse |
+| Le comportement se verifie par sonde DOM, pas par capture | une capture ne prouve pas qu'un bouton se debloque au bon moment ni qu'une table defile |
+| `/master-console` prefixe les routes | choix explicite de l'utilisateur, hors maquette qui place la Console Maitre a la racine |
 
 ## 10. Journal
 
