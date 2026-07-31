@@ -16,36 +16,30 @@ n'est possible. Point clos, ne pas rouvrir.
 
 ## 1. Lot courant
 
-**Passe theme sombre : deux defauts trouves et corriges.**
+**Passe theme sombre TERMINEE. Trois defauts trouves, tous dans le design system.**
 
-La capture de la moderation en sombre a revele un defaut du design system que
-j'avais moi-meme reproduit dans trois fichiers.
+Toutes les pages livrees ont ete capturees en sombre. Trois defauts, tous causes
+par la meme faute : des **primitives de couleur** la ou il fallait des **roles**.
 
-`Sidebar` utilisait `bg-primary-50` et `text-primary-700` : des **primitives**,
-identiques dans les deux themes. En sombre l'item actif gardait un fond pale qui
-avalait son propre libelle. La maquette remappe explicitement
-(`shell.css` : `primary-900` a 60 % sur transparent, texte `primary-300`).
+| Defaut | Ou | Correctif | Version |
+|---|---|---|---|
+| Item de nav actif illisible | `Sidebar` | roles `surface-selected` / `text-selected` + mapping sombre | `0.1.12` |
+| Selection trop saturee | `Sidebar` | opacite 60 %, conforme a `shell.css` | `0.1.13` |
+| Titre du login invisible | `AuthLayout` | le panneau formulaire fixe `text-text-primary`, la racine `bg-surface-page` | `0.1.14` |
 
-**Corrige dans le design system** : trois roles semantiques avec leur mapping
-sombre, `surface-raised`, `surface-selected`, `text-selected`. `Sidebar` les
-utilise. Publie en `0.1.12`, puis `0.1.13` pour l'opacite a 60 % conforme a la
-maquette.
+J'avais reproduit le premier defaut dans trois de mes fichiers : compteurs de nav
+de `partner` et `moderation`, item selectionne de la file. Corriges.
 
-**Corrige dans mes modules** : compteurs de nav de `partner` et `moderation`,
-item selectionne de la file de moderation. Plus aucune primitive de couleur dans
-le code des modules.
+**Pages verifiees en sombre** : tableau de bord, moderation, audit, fiche
+partenaire, login, liste des partenaires.
 
-**Verifie apres install de `0.1.12`** : item actif lisible en sombre, compteurs
-remappes. L'ajustement d'opacite `0.1.13` **n'est pas encore installe**, donc pas
-verifie visuellement.
+**Verifie apres install de `0.1.13`** : fiche partenaire conforme, item actif
+lisible. **`0.1.14` publiee mais non installee** : le correctif du login n'est
+pas confirme visuellement.
 
-**Erreur de diagnostic en cours de route** : j'ai d'abord conclu que la page
-rendait en clair malgre `data-theme='dark'`. Faux — une sonde des couleurs
-calculees donnait `cardBg=rgb(22, 27, 44)`, la surface sombre. Ce que je prenais
-pour une carte claire etait l'encart ambre de citation, correct dans les deux
-themes.
-
-**Pages encore jamais capturees en sombre** : fiche partenaire, login.
+**Responsive** : verifie a 390 px sur le tableau de bord et la liste. Defaut
+`DataTable` corrige en `0.1.11` (defilement au lieu d'ecrasement), mesure a
+911 px dans un conteneur de 342 px.
 
 ## 2. Lots termines
 
