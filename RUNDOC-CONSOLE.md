@@ -16,7 +16,35 @@ n'est possible. Point clos, ne pas rouvrir.
 
 ## 1. Lot courant
 
-**Lot Dashboard plateforme TERMINE (CSM-1). En attente de validation.**
+**Lot 11a, liste des partenaires TERMINE (CSM-2). En attente de validation.**
+
+Route `/partenaires` rendue dans l'application reelle. `0.1.8` installee,
+typecheck 0 erreur, `npm run build -w apps/console` **reussi** (5 routes,
+`/partenaires` en statique), capture comparee a `backoffice/pages/partenaires.html` :
+5 Organisations avec leurs vraies valeurs, plan-tags Free gris / Pro indigo /
+Business noir, colonne « Actifs » en ambre a la limite, badge de suspension date,
+note de signalement croisee, toolbar en ligne. Conforme.
+
+`StatusBadge` etendu aux statuts d'Organisation dans le design system, publie en
+`0.1.8` (lot Q du RUNDOC design system).
+
+Trois ecarts constates a la premiere capture et corriges **dans le consommateur**,
+car ils venaient de mon appel et non du composant :
+- initiales « S » au lieu de « ST » : `Avatar` derive les initiales par mot ;
+  la prop `fallback` existait pour ca, elle est desormais utilisee ;
+- plan-tag Business sans son noir plein : rendu par roles de surface
+  (`bg-text-primary text-surface-card`), aucune couleur litterale ;
+- toolbar sur trois lignes : bornee (`max-w-sm` sur la recherche, `w-44` sur les
+  filtres). Le `Select` du design system est `w-full` par conception, adapte aux
+  formulaires : il est borne au point d'appel, pas modifie.
+
+**Lot 11b non ouvert** : fiche Organisation `/partenaires/[slug]`, modale de
+suspension, vue « en tant que » (CSM-5). Necessite **PlanMeter**, a creer dans le
+design system.
+
+## 1bis. Lot precedent
+
+**Lot Dashboard plateforme TERMINE (CSM-1).**
 
 Ecran 10 rendu dans l'application reelle. `0.1.7` installee, typecheck 0 erreur,
 `npm run build -w apps/console` **reussi** (4 routes, `/` en statique), capture de
@@ -77,10 +105,10 @@ Aucun composant ecrit dans `apps/console` : la coquille vit dans
 
 Perimetre `apps/console` = Console Maitre.
 
-- **Lot Partenaires**, ecran 11, exigences CSM-2 et CSM-5. **Prochain lot.**
-  Rendu de reference : `backoffice/pages/partenaires.html`. Composants attendus :
-  `DataTable`, `Avatar`, `Badge` (conformes), plus les statuts d'Organisation et
-  les 6 badges de cycle de vie a corriger dans le design system.
+- **Lot 11b, fiche Organisation**, ecran 11, exigences CSM-2 et CSM-5.
+  **Prochain lot.** Routes `/partenaires/[slug]`, modale de suspension avec
+  confirmation par saisie du slug, vue « en tant que ». Necessite **PlanMeter**
+  a creer dans le design system (3 jauges de consommation du plan).
 - **Lot Partenaires**, ecran 11, exigences CSM-2 et CSM-5.
 - **Lot Moderation**, ecran 12, exigence CSM-3.
 - **Lot Audit**, ecran 13, exigence CSM-4.
@@ -214,6 +242,19 @@ ete traites.
 | Aucun composant ecrit dans `apps/console` | regle 1, tenue depuis le lot Auth |
 
 ## 10. Journal
+
+### 2026-07-31, lot 11a, liste des partenaires (CSM-2) clos
+- Design system : `StatusBadge` etendu (`OrganizationStatus`, `EntityStatus`),
+  extension additive. 135 tests, publie `v0.1.8`.
+- **NOUVEAU** `packages/shell/partners-list.tsx` : table des 5 Organisations,
+  toolbar recherche + filtres plan et statut, filtrage en memoire.
+- **NOUVEAU** `apps/console/app/(app)/partenaires/page.tsx` : monte la liste (P9).
+- Plages alignees sur `^0.1.8`, racine et `packages/shell`.
+- **Verifications reelles** : `npx tsc -p apps/console --noEmit` **0 erreur** ;
+  `npm run build -w apps/console` **reussi**, 5 routes ; capture comparee a la
+  maquette, conforme apres 3 corrections d'appel (initiales, plan-tag Business,
+  toolbar).
+- `npm run lint` : toujours la seule erreur preexistante dans `auth-page.tsx`.
 
 ### 2026-07-31, lot Dashboard plateforme (CSM-1) clos
 - **NOUVEAU** `packages/shell/platform-dashboard.tsx` : 4 tuiles `StatCard`,
