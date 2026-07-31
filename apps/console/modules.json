@@ -3,6 +3,7 @@
   "modules": [
     "@ef/platform",
     "@ef/partner",
-    "@ef/moderation"
+    "@ef/moderation",
+    "@ef/audit"
   ]
 }

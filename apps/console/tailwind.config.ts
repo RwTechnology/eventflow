@@ -20,6 +20,7 @@ const config: Config = {
     '../../packages/partner/**/*.{ts,tsx}',
     '../../packages/platform/**/*.{ts,tsx}',
     '../../packages/moderation/**/*.{ts,tsx}',
+    '../../packages/audit/**/*.{ts,tsx}',
     '../../node_modules/@rwtechnology/eventflow-design-system/dist/**/*.js',
   ],
 };

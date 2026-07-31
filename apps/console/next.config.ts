@@ -4,12 +4,14 @@ import type { ModuleNextConfig } from '@ef/module-kit';
 import { platformNextConfig } from '@ef/platform/next-config';
 import { partnerNextConfig } from '@ef/partner/next-config';
 import { moderationNextConfig } from '@ef/moderation/next-config';
+import { auditNextConfig } from '@ef/audit/next-config';
 
 // Chaque module embarqué contribue son <camel>NextConfig ici (P5/P11).
 const moduleConfigs: ModuleNextConfig[] = [
   platformNextConfig,
   partnerNextConfig,
   moderationNextConfig,
+  auditNextConfig,
 ];
 
 // Packages internes toujours transpilés (infra) + modules embarqués (P5).

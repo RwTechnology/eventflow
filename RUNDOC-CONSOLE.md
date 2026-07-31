@@ -16,28 +16,27 @@ n'est possible. Point clos, ne pas rouvrir.
 
 ## 1. Lot courant
 
-**Lot Moderation TERMINE (CSM-3). En attente de validation.**
+**Lot Audit TERMINE (CSM-4). Dernier ecran de la Console Maitre.**
 
-Route `/moderation` rendue dans l'application reelle. Typecheck 0 erreur, build
-reussi (7 routes), captures comparees a `backoffice/pages/moderation.html` :
-layout maitre-detail, selection avec fond `primary-50` et lisere gauche, tags de
-motif mono, multiplicite, item traite attenue et toujours visible, encart ambre a
-lisere avec verbatim et source mono, contexte en 3 lignes, 3 actions. Conforme.
+Route `/audit` rendue dans l'application reelle. Typecheck 0 erreur, build reussi
+(8 routes), captures comparees a `backoffice/pages/audit.html` : 4 filtres
+combinables, horodatage mono a la seconde, act-tags colores avec icone et
+libelle, entite en gras + identifiant lisible, pied de volumetrie mono. Panneau
+lateral avec en-tete act-tag + identifiant, 5 lignes cle/valeur, diff rouge/vert
+en mono, pied « Copier l'entree (JSON) ». Conforme.
 
-Modale de depublication : consequence chiffree, motif structure en select,
-precisions pre-redigees modifiables, hint sur le caractere actionnable, bouton
-« Depublier et notifier » qui porte les deux effets. Conforme.
+**`SidePanel` cree dans le design system** et publie en `0.1.10` : `Modal` est
+centre et assombrit a 50 %, l'ecran 13 exige un panneau ancre a droite avec un
+overlay leger pour garder la table lisible.
 
-Nouveau module **`@ef/moderation`**, meme structure que `platform` et `partner`.
-Enregistre par le generateur, route generee depuis le manifeste.
+Nouveau module **`@ef/audit`**. Les 5 plages de version sont alignees sur `^0.1.10`.
 
-Aucun composant cree ni corrige dans le design system : `Card`, `Badge`,
-`Button`, `Modal`, `Field`, `Select`, `Textarea`, `EmptyState`, `StatusBadge`
-suffisaient.
+**Non cable** : pagination serveur, synchronisation des filtres dans l'URL,
+copie JSON, selection au clavier.
 
-**Non cable** : rejeter et depublier retirent l'item de la file cote client, sans
-appel API. Selection au clavier (fleches) et parametre d'URL `?signalement=id`
-non implementes.
+**Les 4 items de nav ont desormais leur module.** La nav de `MasterShell` reste
+codee en dur : elle peut maintenant deriver du registry, comme dans
+`cp-admin-console`. C'est le dernier ecart avec l'architecture de reference.
 
 ## 2. Lots termines
 
@@ -66,6 +65,8 @@ non implementes.
   crees ; `@ef/shell` reduit a l'infra. Routes generees depuis les manifestes.
 - **Lot Moderation** (2026-07-31, CSM-3). Module `@ef/moderation`, file
   maitre-detail et modale de depublication. Aucune intervention design system.
+- **Lot Audit** (2026-07-31, CSM-4). Module `@ef/audit`, journal filtrable et
+  panneau de detail. `SidePanel` cree dans le design system, `0.1.10`.
 
 ## 3. Lots restants
 
@@ -73,7 +74,8 @@ Perimetre `apps/console` = Console Maitre.
 
 - **Lot CSM-5**, vue « en tant que » : bandeau persistant en lecture seule,
   touche le shell.
-- **Lot Audit**, ecran 13, exigence CSM-4. **Prochain lot.**
+- **Derivation de la nav depuis le registry**. **Prochain lot possible.** Les 4
+  modules exposent leur `useNavSection` ; `MasterShell` ne les consomme pas encore.
 - **Lot Etats systeme**, ecran 9, gabarits vide, erreur, skeletons.
 
 Ecrans 2 a 8 : cible `apps/partner`, application absente de ce depot. Hors perimetre.

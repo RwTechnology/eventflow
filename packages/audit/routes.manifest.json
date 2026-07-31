@@ -1,0 +1,8 @@
+{
+  "id": "audit",
+  "package": "@ef/audit",
+  "basePath": "(app)",
+  "routes": [
+    { "route": "audit/page.tsx", "module": "audit-page" }
+  ]
+}
