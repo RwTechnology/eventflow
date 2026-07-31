@@ -1,6 +1,7 @@
 import type { Module } from '@ef/module-kit';
 import { platformModule } from '@ef/platform';
 import { partnerModule } from '@ef/partner';
+import { moderationModule } from '@ef/moderation';
 
 // registry.ts — ordre des sections de nav (client) (P8).
 // L'ordre du tableau = ordre des eyebrows ; systemModule en dernier (P13).
@@ -8,4 +9,5 @@ import { partnerModule } from '@ef/partner';
 export const registry: Module[] = [
   platformModule,
   partnerModule,
+  moderationModule,
 ];

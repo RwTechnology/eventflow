@@ -16,36 +16,28 @@ n'est possible. Point clos, ne pas rouvrir.
 
 ## 1. Lot courant
 
-**Extraction des modules metier TERMINEE. En attente de validation.**
+**Lot Moderation TERMINE (CSM-3). En attente de validation.**
 
-Le metier est sorti de `@ef/shell`, qui ne porte plus que de l'infrastructure
-reutilisable : coquille, auth, providers, theme, proxy.
+Route `/moderation` rendue dans l'application reelle. Typecheck 0 erreur, build
+reussi (7 routes), captures comparees a `backoffice/pages/moderation.html` :
+layout maitre-detail, selection avec fond `primary-50` et lisere gauche, tags de
+motif mono, multiplicite, item traite attenue et toujours visible, encart ambre a
+lisere avec verbatim et source mono, contexte en 3 lignes, 3 actions. Conforme.
 
-Deux modules crees sur le modele de `cp-admin-console`, depot de reference :
+Modale de depublication : consequence chiffree, motif structure en select,
+precisions pre-redigees modifiables, hint sur le caractere actionnable, bouton
+« Depublier et notifier » qui porte les deux effets. Conforme.
 
-| Module | Contenu | Route |
-|---|---|---|
-| `@ef/platform` | tableau de bord plateforme (CSM-1) | `/` |
-| `@ef/partner` | liste, fiche, suspension (CSM-2) | `/partenaires`, `/partenaires/[slug]` |
+Nouveau module **`@ef/moderation`**, meme structure que `platform` et `partner`.
+Enregistre par le generateur, route generee depuis le manifeste.
 
-Chacun porte `components/`, `pages/`, `routes.manifest.json`, `next-config.ts` et
-exporte son `<id>Module`. Enregistres par `npm run gen:register`, jamais a la
-main. Les 3 routes de l'app sont **generees** par `scaffold-routes` depuis les
-manifestes : elles portent la banniere `DO NOT EDIT`.
+Aucun composant cree ni corrige dans le design system : `Card`, `Badge`,
+`Button`, `Modal`, `Field`, `Select`, `Textarea`, `EmptyState`, `StatusBadge`
+suffisaient.
 
-Trois points corriges grace au depot de reference :
-- un module metier ne va **pas** dans `SHARED_INTERNAL_PACKAGES` : cette liste est
-  reservee a l'infra. Il contribue son entree via `moduleConfigs` ;
-- les routes se **generent**, elles ne s'ecrivent pas ;
-- l'ordre du registry pilote l'ordre des eyebrows : `platform` puis `partner`,
-  conforme a la maquette. Reordonne par `gen:unregister` + `gen:register`.
-
-**Verifications** : typecheck 0, build reussi, les 4 routes repondent 200, rendus
-inchanges, aucune dependance entre `shell` et les modules ni entre les modules.
-
-**Reste** : la nav de `MasterShell` est encore codee en dur. Elle pourra deriver
-du registry quand Moderation et Audit seront des modules, comme dans
-`cp-admin-console` ou `registry.ts` liste cinq modules.
+**Non cable** : rejeter et depublier retirent l'item de la file cote client, sans
+appel API. Selection au clavier (fleches) et parametre d'URL `?signalement=id`
+non implementes.
 
 ## 2. Lots termines
 
@@ -72,6 +64,8 @@ du registry quand Moderation et Audit seront des modules, comme dans
   confirmation par saisie du slug. Aucune intervention design system.
 - **Extraction des modules metier** (2026-07-31). `@ef/platform` et `@ef/partner`
   crees ; `@ef/shell` reduit a l'infra. Routes generees depuis les manifestes.
+- **Lot Moderation** (2026-07-31, CSM-3). Module `@ef/moderation`, file
+  maitre-detail et modale de depublication. Aucune intervention design system.
 
 ## 3. Lots restants
 
@@ -79,8 +73,7 @@ Perimetre `apps/console` = Console Maitre.
 
 - **Lot CSM-5**, vue « en tant que » : bandeau persistant en lecture seule,
   touche le shell.
-- **Lot Moderation**, ecran 12, exigence CSM-3.
-- **Lot Audit**, ecran 13, exigence CSM-4.
+- **Lot Audit**, ecran 13, exigence CSM-4. **Prochain lot.**
 - **Lot Etats systeme**, ecran 9, gabarits vide, erreur, skeletons.
 
 Ecrans 2 a 8 : cible `apps/partner`, application absente de ce depot. Hors perimetre.

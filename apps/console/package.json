@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@ef/auth": "*",
+    "@ef/moderation": "*",
     "@ef/module-kit": "*",
     "@ef/partner": "*",
     "@ef/platform": "*",
