@@ -53,10 +53,12 @@ export function SuspendOrganization({
   const matches = typed.trim() === slug;
 
   // La saisie repart a zero a chaque ouverture : une confirmation ne se
-  // pre-remplit pas.
-  React.useEffect(() => {
-    if (open) setTyped('');
-  }, [open]);
+  // pre-remplit pas. Fait dans le handler d'ouverture, pas dans un effet :
+  // un setState synchrone dans useEffect declenche un rendu en cascade.
+  function handleOpenChange(next: boolean) {
+    if (next) setTyped('');
+    setOpen(next);
+  }
 
   return (
     <div className="rounded-lg border border-danger/40 bg-danger/5 p-5">
@@ -73,8 +75,8 @@ export function SuspendOrganization({
           <p className="mt-1 text-xs text-text-secondary">{summary}</p>
         </div>
 
-        <Modal open={open} onOpenChange={setOpen}>
-          <Button variant="danger" size="sm" onClick={() => setOpen(true)}>
+        <Modal open={open} onOpenChange={handleOpenChange}>
+          <Button variant="danger" size="sm" onClick={() => handleOpenChange(true)}>
             Suspendre
           </Button>
 
