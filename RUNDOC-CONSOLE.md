@@ -16,30 +16,35 @@ n'est possible. Point clos, ne pas rouvrir.
 
 ## 1. Lot courant
 
-**Passe theme sombre TERMINEE. Trois defauts trouves, tous dans le design system.**
+**Passe theme sombre et responsive TERMINEE. Cinq defauts trouves et corriges.**
 
-Toutes les pages livrees ont ete capturees en sombre. Trois defauts, tous causes
-par la meme faute : des **primitives de couleur** la ou il fallait des **roles**.
+Toutes les pages livrees capturees en sombre, plus les 3 vues du login. Cinq
+defauts, tous causes par la meme faute : des **primitives de couleur** la ou il
+fallait des **roles semantiques**.
 
 | Defaut | Ou | Correctif | Version |
 |---|---|---|---|
-| Item de nav actif illisible | `Sidebar` | roles `surface-selected` / `text-selected` + mapping sombre | `0.1.12` |
+| Table ecrasee sous 720 px | `DataTable` | seuil `min-w-table`, defilement | `0.1.11` |
+| Item de nav actif illisible | `Sidebar` | roles `surface-selected` / `text-selected` | `0.1.12` |
 | Selection trop saturee | `Sidebar` | opacite 60 %, conforme a `shell.css` | `0.1.13` |
-| Titre du login invisible | `AuthLayout` | le panneau formulaire fixe `text-text-primary`, la racine `bg-surface-page` | `0.1.14` |
+| Titre du login invisible | `AuthLayout` | panneau formulaire en `text-text-primary` | `0.1.14` |
+| « Rester connectee » illisible | `auth-page.tsx` | `text-gray-700` en `text-text-primary` | consommateur |
 
-J'avais reproduit le premier defaut dans trois de mes fichiers : compteurs de nav
-de `partner` et `moderation`, item selectionne de la file. Corriges.
+Les trois premiers defauts avaient ete reproduits dans mes fichiers : compteurs
+de nav, item selectionne de la file. Tous corriges. **Plus aucune primitive de
+couleur dans le code du consommateur.**
+
+**`npm run lint` renvoie 0 erreur** pour la premiere fois : l'entite non echappee
+de `auth-page.tsx`, ouverte depuis le lot Auth, est corrigee.
 
 **Pages verifiees en sombre** : tableau de bord, moderation, audit, fiche
-partenaire, login, liste des partenaires.
+partenaire, liste des partenaires, login (connexion et inscription).
 
-**Verifie apres install de `0.1.13`** : fiche partenaire conforme, item actif
-lisible. **`0.1.14` publiee mais non installee** : le correctif du login n'est
-pas confirme visuellement.
+**Responsive** : verifie a 390 px sur le tableau de bord et la liste.
 
-**Responsive** : verifie a 390 px sur le tableau de bord et la liste. Defaut
-`DataTable` corrige en `0.1.11` (defilement au lieu d'ecrasement), mesure a
-911 px dans un conteneur de 342 px.
+**Non tranche** : le `Select` garde un fond clair en sombre sur la fiche
+partenaire. Contraste correct, comportement peut-etre voulu pour un champ de
+formulaire. A decider.
 
 ## 2. Lots termines
 
@@ -157,12 +162,7 @@ Sorties reelles du dernier lot (11b, 2026-07-31).
 
 ## 6. Defauts ouverts
 
-1. **Lint : entite non echappee dans `packages/shell/auth-page.tsx` ligne 167.**
-   `react/no-unescaped-entities`. Fichier du lot Auth, jamais touche depuis.
-   Non corrige : hors perimetre de chaque lot ouvert depuis. Correction triviale
-   (`&rsquo;`), a faire lors d'un passage sur ce fichier.
-
-2. **Publication non verifiable depuis cette machine.**
+1. **Publication non verifiable depuis cette machine.**
    `npm view` renvoie `E401` et `gh run list` `HTTP 404` dans l'environnement de
    l'assistant : pas de `GITHUB_TOKEN`. Chaque publication est declenchee par un
    tag pousse, puis confirmee par l'utilisateur qui execute `npm i`. La reussite

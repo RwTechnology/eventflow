@@ -87,7 +87,7 @@ export function AuthPage({ vue: initialVue = 'connexion', demoEtat }: AuthPagePr
               <PasswordInput id="pwd" autoComplete="current-password" invalid={showLoginError} />
             </Field>
             <div className="flex items-center justify-between">
-              <label className="flex items-center gap-2 text-sm text-gray-700">
+              <label className="flex items-center gap-2 text-sm text-text-primary">
                 <Checkbox defaultChecked />
                 Rester connectée
               </label>
@@ -164,7 +164,7 @@ export function AuthPage({ vue: initialVue = 'connexion', demoEtat }: AuthPagePr
 
           {showSentNote ? (
             <Alert tone="success" role="status" icon={<MailCheck className="h-icon-md w-icon-md" />} className="mt-6">
-              Si un compte existe pour <b>sarah.lemoine@exemple.fr</b>, un lien de réinitialisation vient d'être
+              Si un compte existe pour <b>sarah.lemoine@exemple.fr</b>, un lien de réinitialisation vient d’être
               envoyé. Pensez aux indésirables.
             </Alert>
           ) : null}
