@@ -16,27 +16,36 @@ n'est possible. Point clos, ne pas rouvrir.
 
 ## 1. Lot courant
 
-**Lot 11c, suspension TERMINE (CSM-2). En attente de validation.**
+**Extraction des modules metier TERMINEE. En attente de validation.**
 
-Zone sensible et modale de confirmation ajoutees a la fiche Organisation.
-Typecheck 0 erreur, `npm run build -w apps/console` **reussi** (6 routes).
+Le metier est sorti de `@ef/shell`, qui ne porte plus que de l'infrastructure
+reutilisable : coquille, auth, providers, theme, proxy.
 
-Comportement verifie par sonde DOM, pas seulement par capture :
-`disabledInitial=true`, `disabledWrong=true`, `disabledExact=false`. Le bouton
-danger ne s'active qu'a la saisie exacte du slug, comme l'exige la maquette.
+Deux modules crees sur le modele de `cp-admin-console`, depot de reference :
 
-Captures comparees a `backoffice/pages/partenaires.html` : zone sensible avec son
-resume chiffre avant ouverture, modale avec titre, 4 consequences chiffrees,
-champ de confirmation et bouton danger desactive. Conforme.
+| Module | Contenu | Route |
+|---|---|---|
+| `@ef/platform` | tableau de bord plateforme (CSM-1) | `/` |
+| `@ef/partner` | liste, fiche, suspension (CSM-2) | `/partenaires`, `/partenaires/[slug]` |
 
-Aucun composant crée ni corrigé dans le design system : `Modal`, `Field`,
-`Input`, `Button` suffisaient.
+Chacun porte `components/`, `pages/`, `routes.manifest.json`, `next-config.ts` et
+exporte son `<id>Module`. Enregistres par `npm run gen:register`, jamais a la
+main. Les 3 routes de l'app sont **generees** par `scaffold-routes` depuis les
+manifestes : elles portent la banniere `DO NOT EDIT`.
 
-La suspension n'est pas appliquee : `SuspendOrganization` remonte l'intention par
-`onConfirm`, non cable. Backend = chantier separe (CdC §9.4).
+Trois points corriges grace au depot de reference :
+- un module metier ne va **pas** dans `SHARED_INTERNAL_PACKAGES` : cette liste est
+  reservee a l'infra. Il contribue son entree via `moduleConfigs` ;
+- les routes se **generent**, elles ne s'ecrivent pas ;
+- l'ordre du registry pilote l'ordre des eyebrows : `platform` puis `partner`,
+  conforme a la maquette. Reordonne par `gen:unregister` + `gen:register`.
 
-**Reste sur l'ecran 11** : reactivation (meme motif inverse, confirmation simple
-sans saisie) et vue « en tant que » (CSM-5, touche le shell).
+**Verifications** : typecheck 0, build reussi, les 4 routes repondent 200, rendus
+inchanges, aucune dependance entre `shell` et les modules ni entre les modules.
+
+**Reste** : la nav de `MasterShell` est encore codee en dur. Elle pourra deriver
+du registry quand Moderation et Audit seront des modules, comme dans
+`cp-admin-console` ou `registry.ts` liste cinq modules.
 
 ## 2. Lots termines
 
@@ -61,6 +70,8 @@ sans saisie) et vue « en tant que » (CSM-5, touche le shell).
   `/partenaires/[slug]`. `0.1.9`.
 - **Lot 11c, suspension** (2026-07-31, CSM-2). Zone sensible et modale de
   confirmation par saisie du slug. Aucune intervention design system.
+- **Extraction des modules metier** (2026-07-31). `@ef/platform` et `@ef/partner`
+  crees ; `@ef/shell` reduit a l'infra. Routes generees depuis les manifestes.
 
 ## 3. Lots restants
 
@@ -95,15 +106,24 @@ commite et pousse.
 Aucune de ces routes ne definit de composant : chacune monte un corps de page
 venu de `@ef/shell` (P9).
 
-### Corps de page dans `packages/shell`
+### Corps de page dans les modules metier
+
+| Chemin | Role |
+|---|---|
+| `packages/platform/components/platform-dashboard.tsx` | ecran 10 |
+| `packages/platform/pages/platform-page.tsx` | corps de la route `/` |
+| `packages/partner/components/partners-list.tsx` | ecran 11, vue liste |
+| `packages/partner/components/partner-detail.tsx` | ecran 11, vue fiche |
+| `packages/partner/components/suspend-organization.tsx` | zone sensible + modale |
+| `packages/partner/pages/*.tsx` | corps des routes `/partenaires` |
+
+### Infrastructure dans `packages/shell`
 
 | Chemin | Role |
 |---|---|
 | `master-shell.tsx` | coquille Console Maitre, compose `AppShell` |
-| `platform-dashboard.tsx` | ecran 10 |
-| `partners-list.tsx` | ecran 11, vue liste |
-| `partner-detail.tsx` | ecran 11, vue fiche |
-| `auth-page.tsx` | page d'auth, lot Auth |
+| `auth-page.tsx` | page d'auth |
+| `providers.tsx`, `theme-toggle.tsx`, `proxy.ts` | infra transverse |
 | `app-shell-layout.tsx` | coquille anterieure au design system, plus montee |
 
 ### Configuration
