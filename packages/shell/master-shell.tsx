@@ -1,9 +1,10 @@
 'use client';
 
 import * as React from 'react';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import type { Module } from '@ef/module-kit';
 import { AppShell } from '@rwtechnology/eventflow-design-system/app-shell';
+import { ImpersonationBanner } from './impersonation-banner';
 import { ThemeToggle } from './theme-toggle';
 import { useModuleNav } from './use-module-nav';
 
@@ -27,23 +28,50 @@ export interface MasterShellProps {
   children: React.ReactNode;
 }
 
+/**
+ * Lit `?en-tant-que` et rend le bandeau (CSM-5). Isolé dans son propre composant
+ * parce que `useSearchParams` bloque le prérendu statique de toute la page qui
+ * l'appelle : sous Suspense, seul ce fragment devient dynamique, les 5 routes
+ * restent statiques.
+ */
+function ImpersonationSlot() {
+  const router = useRouter();
+  const organization = useSearchParams().get('en-tant-que');
+  if (!organization) return null;
+  return (
+    <ImpersonationBanner
+      organization={organization}
+      onExit={() => router.push('/master-console/partenaires')}
+    />
+  );
+}
+
 export function MasterShell({ brand = 'EventFlow', modules, children }: MasterShellProps) {
   const pathname = usePathname();
   const router = useRouter();
   const sections = useModuleNav(modules);
 
   return (
-    <AppShell
-      brand={brand}
-      master
-      nav={{
-        sections,
-        activeHref: pathname,
-        onNavigate: (href) => router.push(href),
-      }}
-      headerActions={<ThemeToggle />}
-    >
-      {children}
-    </AppShell>
+    <div className="flex min-h-[100dvh] flex-col">
+      {/* Au-dessus de tout, lisere maître compris : un contexte emprunté ne doit
+          jamais être confondable. */}
+      <React.Suspense fallback={null}>
+        <ImpersonationSlot />
+      </React.Suspense>
+
+      <AppShell
+        brand={brand}
+        master
+        className="flex-1"
+        nav={{
+          sections,
+          activeHref: pathname,
+          onNavigate: (href) => router.push(href),
+        }}
+        headerActions={<ThemeToggle />}
+      >
+        {children}
+      </AppShell>
+    </div>
   );
 }

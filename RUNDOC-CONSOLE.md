@@ -16,34 +16,31 @@ n'est possible. Point clos, ne pas rouvrir.
 
 ## 1. Lot courant
 
-**Reactivation d'une Organisation TERMINEE. Ecran 11 clos.**
+**CSM-5, vue « en tant que » TERMINEE. Perimetre CSM-1 a CSM-5 complet.**
 
-`SuspendOrganization` gagne un mode `suspended` : la zone bascule sur la
-reactivation plutot que d'ouvrir un second composant. Motif inverse, conforme a
-la maquette.
+`ImpersonationBanner` dans `@ef/shell` : bandeau ambre persistant, au-dessus de
+tout, lisere maitre compris. « Vous consultez la console de X en lecture seule »
+plus une action Quitter. Il ne se ferme pas, il se quitte : c'est le seul repere
+qui distingue « je regarde le compte de X » de « je suis X ».
 
-| | Suspension | Reactivation |
-|---|---|---|
-| Zone | bordure danger, fond rouge | bordure neutre, fond attenue |
-| Bouton | `danger` « Suspendre » | `secondary` « Reactiver » |
-| Confirmation | **saisie exacte du slug** | simple clic |
-| Consequences | 4 lignes chiffrees | 3 lignes de retour a l'etat anterieur |
+Le bouton de la fiche Organisation pointe vers `?en-tant-que=<nom>` ; la coquille
+lit l'URL cote client, un layout ne recevant pas `searchParams` en Next.
 
-La friction reste sur l'action destructrice seulement : on ne demande pas de
-saisir un slug pour revenir en arriere.
+**Deux pieges rencontres, tous deux corriges** :
+- `useSearchParams` **casse le prerendu statique** de toute page qui l'appelle :
+  le build echouait sur `/master-console/audit`. Isole dans un composant sous
+  `Suspense`, seul ce fragment devient dynamique et les 3 routes statiques le
+  restent.
+- `asChild` du `Button` passe par Radix Slot, qui exige un enfant unique :
+  combine a `leftIcon` il ne rendait aucun lien. Le `Link` enveloppe le bouton
+  plutot que l'inverse.
 
-Declenchement par `?etat=suspendu`, meme convention que le login et le tableau
-de bord. L'etat reel viendra de l'API (CdC §9.4).
+**Verifications** : typecheck 0, build reussi 6 routes dont 3 statiques, les 2
+etats repondent 200, capture conforme, lien verifie par sonde DOM
+(`href=?en-tant-que=...`), lint 0 erreur.
 
-**Comportement verifie par sonde DOM, pas seulement par capture** :
-- reactivation : `champSlug=false`, `confirmActif=true` ;
-- suspension : `champSlug=true`, `confirmDesactive=true`, aucune regression.
-
-**Verifications** : typecheck 0, build reussi 6 routes, les 2 etats repondent
-200, capture conforme, lint 0 erreur.
-
-**Il ne reste que CSM-5** : vue « en tant que », bandeau persistant en lecture
-seule. Le bouton existe sur la fiche, non cable ; le bandeau touche le shell.
+**Le perimetre fonctionnel de la Console Maitre est couvert** : CSM-1 a CSM-5,
+plus les etats transverses de l'ecran 9.
 
 ## 2. Lots termines
 
@@ -83,8 +80,6 @@ seule. Le bouton existe sur la fiche, non cable ; le bandeau touche le shell.
 
 Perimetre `apps/console` = Console Maitre.
 
-- **CSM-5, vue « en tant que »** : bandeau persistant en lecture seule. Le bouton
-  existe sur la fiche Organisation, non cable ; le bandeau touche le shell.
 
 Ecrans 2 a 8 : cible `apps/partner`, application absente de ce depot. Hors perimetre.
 

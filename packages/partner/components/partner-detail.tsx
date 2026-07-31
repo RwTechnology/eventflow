@@ -1,6 +1,7 @@
 'use client';
 
 import * as React from 'react';
+import Link from 'next/link';
 import { ExternalLink, Eye } from 'lucide-react';
 import { Avatar } from '@rwtechnology/eventflow-design-system/avatar';
 import { Badge } from '@rwtechnology/eventflow-design-system/badge';
@@ -130,16 +131,18 @@ export function PartnerDetail({ slug, demoEtat }: PartnerDetailProps) {
         </div>
 
         <div className="flex flex-wrap items-center gap-2">
-          {/* CSM-5 : la vue « en tant que » touche le shell, hors de ce lot.
-              L'icône passe par `leftIcon`, pas en enfant : le composant gère
-              l'espacement et l'alignement. */}
-          <Button
-            variant="secondary"
-            size="sm"
-            leftIcon={<Eye className="h-icon-sm w-icon-sm" aria-hidden="true" />}
-          >
-            Voir en tant que (lecture seule)
-          </Button>
+          {/* CSM-5 : le bandeau persistant vit dans la coquille, qui lit
+              `?en-tant-que` dans l'URL. L'icône passe par `leftIcon`, pas en
+              enfant : le composant gère l'espacement et l'alignement. */}
+          <Link href={`?en-tant-que=${encodeURIComponent(o.name)}`}>
+            <Button
+              variant="secondary"
+              size="sm"
+              leftIcon={<Eye className="h-icon-sm w-icon-sm" aria-hidden="true" />}
+            >
+              Voir en tant que (lecture seule)
+            </Button>
+          </Link>
           <Button
             variant="ghost"
             size="sm"

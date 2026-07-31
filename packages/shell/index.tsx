@@ -2,6 +2,10 @@
 export { AppShellLayout } from './app-shell-layout';
 export { MasterShell, type MasterShellProps } from './master-shell';
 export { useModuleNav } from './use-module-nav';
+export {
+  ImpersonationBanner,
+  type ImpersonationBannerProps,
+} from './impersonation-banner';
 // Etats transverses (maquette ecran 9) : reutilisables par tout module.
 export {
   StaleDataBanner,
