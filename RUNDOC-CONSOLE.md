@@ -41,80 +41,6 @@ Deux ecarts constates a la premiere capture et corriges **dans le consommateur**
   bandeau persistant touche le shell, pas cette page.
 - Le changement de plan est presente, non applique : il passera par l'API (CSM-2).
 
-## 1bis. Lot precedent
-
-**Lot 11a, liste des partenaires TERMINE (CSM-2).**
-
-Route `/partenaires` rendue dans l'application reelle. `0.1.8` installee,
-typecheck 0 erreur, `npm run build -w apps/console` **reussi** (5 routes,
-`/partenaires` en statique), capture comparee a `backoffice/pages/partenaires.html` :
-5 Organisations avec leurs vraies valeurs, plan-tags Free gris / Pro indigo /
-Business noir, colonne « Actifs » en ambre a la limite, badge de suspension date,
-note de signalement croisee, toolbar en ligne. Conforme.
-
-`StatusBadge` etendu aux statuts d'Organisation dans le design system, publie en
-`0.1.8` (lot Q du RUNDOC design system).
-
-Trois ecarts constates a la premiere capture et corriges **dans le consommateur**,
-car ils venaient de mon appel et non du composant :
-- initiales « S » au lieu de « ST » : `Avatar` derive les initiales par mot ;
-  la prop `fallback` existait pour ca, elle est desormais utilisee ;
-- plan-tag Business sans son noir plein : rendu par roles de surface
-  (`bg-text-primary text-surface-card`), aucune couleur litterale ;
-- toolbar sur trois lignes : bornee (`max-w-sm` sur la recherche, `w-44` sur les
-  filtres). Le `Select` du design system est `w-full` par conception, adapte aux
-  formulaires : il est borne au point d'appel, pas modifie.
-
-**Lot 11b non ouvert** : fiche Organisation `/partenaires/[slug]`, modale de
-suspension, vue « en tant que » (CSM-5). Necessite **PlanMeter**, a creer dans le
-design system.
-
-## 1bis. Lot precedent
-
-**Lot Dashboard plateforme TERMINE (CSM-1).**
-
-Ecran 10 rendu dans l'application reelle. `0.1.7` installee, typecheck 0 erreur,
-`npm run build -w apps/console` **reussi** (4 routes, `/` en statique), capture de
-`http://localhost:3000/` comparee a `backoffice/pages/console-dashboard.html` :
-4 tuiles, tendance 30 jours avec pics, panneaux Moderation et Nouveaux
-partenaires, compteurs de nav 128 et 3. Conforme.
-
-Le **marqueur d'item actif est enfin observable** sur « Plateforme » : `/`
-correspond desormais a un item de la nav.
-
-Donnees fictives du prototype, aucun appel API. Le backend est un chantier separe
-(CdC §9.4, depot `eventflow-api`).
-
-**Defaut du design system corrige en cours de lot** : `'use client'` etait retire
-par tsup a la publication, les 25 composants interactifs etaient donc inutilisables
-depuis une page serveur. Corrige et publie en `0.1.7`. Voir le RUNDOC du design
-system, journal du 2026-07-31.
-
-## 1bis. Lot precedent
-
-**Lot Shell Maitre TERMINE, etapes 1 a 12.**
-
-Toute la chaine est validee de bout en bout, pour la premiere fois :
-`0.1.4` publiee et installee, `master` expose par le paquet,
-`npx tsc -p apps/console --noEmit` renvoie **0 erreur**, et
-`npm run build -w apps/console` **reussit** (4 routes generees).
-
-Le shell Maitre est monte et rendu dans l'application reelle. Capture headless
-sur `http://localhost:3000` comparee a `backoffice/pages/shell.html?console=master` :
-lisere ambre en haut du viewport, badge mono « CONSOLE MAITRE » sous la marque,
-sections Plateforme et Controle avec leurs 4 items et leurs icones. Conforme.
-
-Aucun composant ecrit dans `apps/console` : la coquille vit dans
-`packages/shell/master-shell.tsx`, composee depuis le design system publie.
-
-## 1bis. Ce qui reste a cabler, hors lot
-
-- Compteurs de nav (`partnerCount`, `moderationCount`) : props presentes sur
-  `MasterShell`, non alimentees. Elles viendront de l'API (CSM-2, CSM-3).
-- Marqueur d'item actif non observable tant qu'aucune route du groupe `(app)`
-  n'existe : `activeHref` vaut le chemin courant, et le registry est vide.
-  Il s'affichera des la premiere route reelle, ecran 10.
-
 ## 2. Lots termines
 
 - **Lot Auth** (2026-07-24, `RUNDOC-AUTH.md`). Page `/login` composee depuis
@@ -126,7 +52,16 @@ Aucun composant ecrit dans `apps/console` : la coquille vit dans
   Chargement effectif des polices constate. Cause de l'absence de
   `preset.d.ts` prouvee.
 - **Correction tsup** (2026-07-30). Conflit de `clean` corrige, build complet
-  verifie par `ls`. Publication non effectuee, voir defaut ouvert 1.
+  verifie par `ls`. Publie en `0.1.3`.
+- **Lot Shell Maitre** (2026-07-30). Prop `master` sur `AppShell`, marqueur actif
+  detache sur `Sidebar`, shell monte dans `apps/console`. `0.1.4`.
+- **Lot Dashboard plateforme** (2026-07-31, CSM-1). `StatCard` et `TrendChart`
+  crees, route `/`. `0.1.5` puis `0.1.6` (correctif D9), `0.1.7` (correctif
+  `'use client'`).
+- **Lot 11a, liste des partenaires** (2026-07-31, CSM-2). `StatusBadge` etendu
+  aux statuts d'Organisation, route `/partenaires`. `0.1.8`.
+- **Lot 11b, fiche Organisation** (2026-07-31, CSM-2). `PlanMeter` cree, route
+  `/partenaires/[slug]`. `0.1.9`.
 
 ## 3. Lots restants
 
@@ -141,126 +76,122 @@ Perimetre `apps/console` = Console Maitre.
 - **Lot Moderation**, ecran 12, exigence CSM-3.
 - **Lot Audit**, ecran 13, exigence CSM-4.
 - **Lot Etats systeme**, ecran 9, gabarits vide, erreur, skeletons.
-- **Lot Partenaires**, ecran 11, exigences CSM-2 et CSM-5.
-- **Lot Moderation**, ecran 12, exigence CSM-3.
-- **Lot Audit**, ecran 13, exigence CSM-4.
-- **Lot Etats systeme**, ecran 9, gabarits vide, erreur, skeletons.
 
 Ecrans 2 a 8 : cible `apps/partner`, application absente de ce depot. Hors perimetre.
 
-## 4. Fichiers en cours
+## 4. Etat des fichiers
 
-### Design system, modifies et non commites
+Aucun fichier en cours de modification. Les depots sont propres, tout est
+commite et pousse.
 
-| Chemin | Modification |
-|---|---|
-| `eventflow-design-system/tsup.config.ts` | ligne 53, `clean: true` remplace par `clean: false` plus commentaire d'explication |
-| `eventflow-design-system/package.json` | ajout du script `prebuild` qui vide `dist` avant `tsup` |
-
-### Monorepo, aucun fichier applicatif modifie
+### Routes de `apps/console`
 
 | Chemin | Role |
 |---|---|
-| `apps/console/app/layout.tsx` | layout racine |
-| `apps/console/app/globals.css` | importe `tokens.css` et `styles.css` du design system |
-| `apps/console/app/page.tsx` | redirige vers `/login`, registry vide |
-| `apps/console/app/login/page.tsx` | monte `AuthPage` depuis `@ef/shell` |
-| `apps/console/app/(app)/layout.tsx` | groupe applicatif, sans route enfant |
-| `apps/console/app/api/auth/[...nextauth]/route.ts` | route NextAuth |
-| `apps/console/registry.ts` | tableau vide, genere par `gen:register` |
-| `apps/console/modules.json` | `modules: []` |
-| `apps/console/tailwind.config.ts` | presets design system puis interne, porte l'erreur TS7016 |
-| `package.json` racine | plage `^0.1.1`, **non alignee**, voir defaut ouvert 2 |
+| `app/layout.tsx` | layout racine |
+| `app/globals.css` | importe `tokens.css` et `styles.css` du design system |
+| `app/login/page.tsx` | monte `AuthPage` depuis `@ef/shell` |
+| `app/(app)/layout.tsx` | monte `MasterShell`, compteurs 128 et 3 |
+| `app/(app)/page.tsx` | tableau de bord plateforme, CSM-1 |
+| `app/(app)/partenaires/page.tsx` | liste des Organisations, CSM-2 |
+| `app/(app)/partenaires/[slug]/page.tsx` | fiche Organisation, CSM-2 |
+| `app/api/auth/[...nextauth]/route.ts` | route NextAuth |
+
+Aucune de ces routes ne definit de composant : chacune monte un corps de page
+venu de `@ef/shell` (P9).
+
+### Corps de page dans `packages/shell`
+
+| Chemin | Role |
+|---|---|
+| `master-shell.tsx` | coquille Console Maitre, compose `AppShell` |
+| `platform-dashboard.tsx` | ecran 10 |
+| `partners-list.tsx` | ecran 11, vue liste |
+| `partner-detail.tsx` | ecran 11, vue fiche |
+| `auth-page.tsx` | page d'auth, lot Auth |
+| `app-shell-layout.tsx` | coquille anterieure au design system, plus montee |
+
+### Configuration
+
+| Chemin | Etat |
+|---|---|
+| `package.json` racine, `packages/shell/package.json` | tous deux en `^0.1.9` |
+| `apps/console/registry.ts`, `modules.json` | vides : la nav Maitre est portee par `MasterShell`, pas par le registry |
+| `apps/console/tailwind.config.ts` | presets design system puis interne |
 
 ## 5. Commandes de verification
 
+Sorties reelles du dernier lot (11b, 2026-07-31).
+
 | Commande | Resultat reel |
 |---|---|
-| `git diff tsup.config.ts package.json` | 2 fichiers, 6 insertions, 1 suppression |
-| `npm run build` du design system, run complet | `Done in 1694ms`, aucune erreur |
-| `ls -la dist/preset*` apres run complet | `preset.d.ts` **present, 6835 octets**, plus `.d.cts`, `.js`, `.cjs`, `.map` |
-| `ls dist/components/*/index.d.ts` | 36 fichiers |
-| `ls dist/components/*/index.js` | 36 fichiers |
-| `ls dist/index.d.ts dist/index.js dist/styles.css dist/tokens.css` | les 4 presents |
-| `npm test` du design system | **36 fichiers, 123 tests, tous passes**, duree 47 s |
-| `npm run typecheck` du design system | **2 erreurs TS2322**, `src/components/auth-layout/auth-layout.stories.tsx` lignes 37 et 67 |
-| `npx tsc --noEmit` avec mes modifs mises de cote | **2 erreurs**, identiques : les erreurs preexistent a la correction |
-| `git diff --name-only` | `package.json`, `tsup.config.ts` seulement, aucune story modifiee |
-| `npm view @rwtechnology/eventflow-design-system version` | `E401 Unauthorized`, registre inaccessible |
-| `gh run list` | `HTTP 404: Not Found`, pas d'acces API au depot prive |
-| `grep Typecheck .github/workflows/publish.yml` | etape ligne 28, `npm run typecheck`, avant `Build` et `Publish` |
-| `npx tsc -p apps/console --noEmit` | **1 erreur TS7016** sur le sous-chemin `preset`, etat inchange |
-| version publiee du design system | `0.1.2`, **non bumpee**, aucun tag `v0.1.3` cree |
-| `npm run build -w apps/console` | NON EXECUTE |
-| `npm run lint` du monorepo | NON EXECUTE |
+| `npx tsc -p apps/console --noEmit` | **0 erreur** |
+| `npm run build -w apps/console` | **reussi**, 6 routes |
+| `npm run lint` | 1 erreur preexistante, `packages/shell/auth-page.tsx:167` |
+| design system : `npx tsc --noEmit` | 0 erreur |
+| design system : `npm test` | **139 tests**, 38 fichiers |
+| design system : `npm run build` | 25 composants client, `dist/preset.d.ts` present |
+| design system : grep hex dans `src/components` | 0 |
+| version installee | `0.1.9`, plages racine et `packages/shell` alignees |
+| captures headless comparees aux rendus de maquette | ecrans 1, 10, 11 liste et fiche : conformes |
+| `npm run dev:console` | `/`, `/partenaires`, `/partenaires/[slug]`, `/login` : 200 |
 
 ## 6. Defauts ouverts
 
-1. **RESOLU. `preset.d.ts` absent du paquet publie `0.1.2`.**
-   `tsup.config.ts` declarait deux blocs dans le meme run : le bloc 1 portait
-   `clean: true`, le bloc 2 `clean: false`. Le `clean` du bloc 1 effacait le
-   `dist/preset.d.ts` emis par le bloc 2. Corrige dans `a4b03c8` : `clean: false`
-   sur le bloc 1 plus un script `prebuild` qui vide `dist`.
-   Verifie apres publication et installation de `0.1.3` : `dist/preset.d.ts`
-   present dans le paquet installe, `npx tsc -p apps/console --noEmit` renvoie
-   0 erreur. Defaut clos.
+1. **Lint : entite non echappee dans `packages/shell/auth-page.tsx` ligne 167.**
+   `react/no-unescaped-entities`. Fichier du lot Auth, jamais touche depuis.
+   Non corrige : hors perimetre de chaque lot ouvert depuis. Correction triviale
+   (`&rsquo;`), a faire lors d'un passage sur ce fichier.
 
-2. **2 erreurs de typecheck bloquant la CI. Cause prouvee, corrigee dans
-   `ad60c79`.**
-   `src/components/auth-layout/auth-layout.stories.tsx` lignes 37 et 67
-   declaraient `export const X: Story = { render: () => ... }` sans `args`, alors
-   que `AuthLayout` declare `children` requis, ce qui rend `args` obligatoire
-   pour `StoryObj<typeof meta>`. Erreur `TS2322`, `Property 'args' is missing`.
-   Introduites par `bc6531e`, posterieur au tag `v0.1.2`, donc jamais passees en
-   CI. Prouvees preexistantes a la correction `tsup` en mettant celle-ci de cote.
-   Corrige par `args: { children: null }` sur les deux stories ; le rendu reste
-   porte par `render`. `npm run typecheck` renvoie desormais 0 erreur.
+2. **Publication non verifiable depuis cette machine.**
+   `npm view` renvoie `E401` et `gh run list` `HTTP 404` dans l'environnement de
+   l'assistant : pas de `GITHUB_TOKEN`. Chaque publication est declenchee par un
+   tag pousse, puis confirmee par l'utilisateur qui execute `npm i`. La reussite
+   d'une CI n'est jamais affirmee sans cette confirmation.
 
-3. **Plages alignees sur `^0.1.3`, installation non effectuee.**
-   `package.json` racine et `packages/shell/package.json` declarent desormais
-   `^0.1.3`. Le desaccord anterieur, `^0.1.1` contre `^0.1.2`, est resorbe ; sa
-   cause d'origine n'a jamais ete prouvee.
-   `npm install` n'a pas ete execute depuis cette machine : `GITHUB_TOKEN` est
-   absent de l'environnement et `.npmrc` en depend
-   (`//npm.pkg.github.com/:_authToken=${GITHUB_TOKEN}`). Le compte `gh` porte les
-   scopes `gist`, `read:org`, `repo`, `workflow`, sans `read:packages`.
-   Tant que l'installation n'a pas eu lieu, `package-lock.json` epingle `0.1.2`
-   et `apps/console` conserve son erreur `TS7016`.
+### Defauts clos, conserves pour memoire
 
-4. **Publication non verifiable depuis cette machine.**
-   `npm view` renvoie `E401`, `gh run list` renvoie `HTTP 404`. Toute
-   publication passe par la CI sur tag et ne peut etre confirmee que par
-   l'utilisateur, onglet Actions.
+- **`preset.d.ts` absent du paquet publie** (jusqu'a `0.1.2`). Conflit de `clean`
+  entre les deux blocs `tsup`. Corrige, publie en `0.1.3`, verifie par `ls` et par
+  le typecheck du consommateur.
+- **2 erreurs `TS2322` bloquant la CI** (`auth-layout.stories.tsx`). Stories sans
+  `args` alors que `children` est requis. Corrige, publie en `0.1.3`.
+- **`'use client'` retire a la publication** (jusqu'a `0.1.6`). tsup retirait la
+  directive ; les 25 composants interactifs cassaient toute page serveur les
+  important. Reinjectee fichier par fichier apres build, publie en `0.1.7`.
+- **Desaccord de plages de version** (`^0.1.1` contre `^0.1.2`). Resorbe ; les
+  deux plages sont alignees a chaque lot depuis.
 
-## 7. Statut de conformite des composants, acquis
+## 7. Statut de conformite des composants
 
-Etabli en passe 1 par comparaison story contre rendu de maquette. Non requalifie
-depuis. Les polices `Inter` et `Space Mono` etaient chargees depuis le reseau
+Etabli par comparaison story ou page rendue contre rendu de maquette, captures
+headless. Les polices `Inter` et `Space Mono` sont chargees depuis le reseau
 pendant les captures, constate par sonde `document.fonts`.
 
-| Composant | Statut | Ecart |
+| Composant | Statut | Note |
 |---|---|---|
-| `Card` | conforme verifie par rendu, polices chargees depuis le reseau | aucun |
-| `DataTable` | conforme verifie par rendu, polices chargees depuis le reseau | aucun sur la structure. Cellules riches composables par `cell` |
-| `Avatar` | conforme verifie par rendu, polices chargees depuis le reseau | aucun |
-| `Skeleton` | conforme verifie par rendu, polices chargees depuis le reseau | aucun |
-| `EmptyState` | conforme verifie par rendu, polices chargees depuis le reseau | aucun |
-| `Sidebar` | a corriger dans le design system | marqueur actif en `border-l` colle au bord ; la maquette pose une barre 2 px detachee, `left: -8px`, `top: 8px`, `bottom: 8px`, `radius-full`. Compteur `trailing` sans fond `primary-100` sur item actif |
-| `Badge` | a corriger dans le design system | les 6 badges de cycle de vie `draft live full done cancel archived` non couverts comme jeu nomme |
-| `StatusBadge` | a corriger dans le design system | expose `ReservationStatus` seulement ; l'ecran 11 exige les statuts d'Organisation |
-| `AppShell` | a corriger dans le design system | prop `master` absente, badge ambre et lisere `warning-500` 2 px absents |
-| StatCard | a creer dans le design system | 4 tuiles de l'ecran 10 : libelle, valeur, delta mono 30 jours |
-| TrendChart | a creer dans le design system | barres 30 jours, pics week-end pleine opacite, autres a 55 pour cent. Rendu SVG pilote par tokens, aucune librairie requise |
+| `Card`, `DataTable`, `Avatar`, `Skeleton`, `EmptyState` | conformes | verifies par rendu, passe 1 |
+| `Sidebar` | **corrige**, `0.1.4` | marqueur actif en barre detachee 2 px, compteur renforce sur l'actif |
+| `AppShell` | **corrige**, `0.1.4` | prop `master` : lisere warning 2 px, badge mono |
+| `StatusBadge` | **corrige**, `0.1.8` | `OrganizationStatus` ajoute, extension additive |
+| `StatCard` | **cree**, `0.1.5` | 4 tuiles de l'ecran 10 |
+| `TrendChart` | **cree**, `0.1.5` puis `0.1.6` | barres SVG pilotees par tokens, aucune librairie |
+| `PlanMeter` | **cree**, `0.1.9` | limite de plan, distinct de `CapacityGauge` |
+| `Badge` | **ecart ouvert** | les 6 badges de cycle de vie d'evenement (`draft live full done cancel archived`) ne sont pas couverts comme jeu nomme. Non requis par les ecrans livres ; le sera par les ecrans 4 et 6, cible `apps/partner`, hors perimetre de ce depot |
 
 ## 8. Perimetre non couvert
 
-Distinct des defauts ouverts. Ces points ne sont pas des defauts, ils n'ont pas
+Distinct des defauts ouverts : ces points ne sont pas des defauts, ils n'ont pas
 ete traites.
 
-- Ecrans 9, 12 et 13 : aucun composant qualifie, hors lot.
-- Ecrans 2 a 8 : hors perimetre de `apps/console`.
-- `npm run lint` du monorepo et `npm run build -w apps/console` : non executes.
-- Correction des 2 stories `auth-layout` : identifiee, non appliquee.
+- **Ecrans 9, 12, 13** : aucun composant qualifie, hors lot.
+- **Ecrans 2 a 8** : cible `apps/partner`, application absente de ce depot.
+- **Backend** : aucun appel API. Toutes les pages rendent le jeu fictif du
+  prototype. Chantier separe (CdC §9.4, depot `eventflow-api`).
+- **Theme sombre et responsive** : les classes sont posees sur toutes les pages
+  livrees, aucune capture n'a ete faite pour les verifier.
+- **Comportements non cables** : `signIn` sur `/login`, changement de plan sur la
+  fiche, bouton « Voir en tant que » (CSM-5).
 
 ## 9. Decisions prises
 
