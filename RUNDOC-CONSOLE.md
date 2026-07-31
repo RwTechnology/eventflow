@@ -16,7 +16,28 @@ n'est possible. Point clos, ne pas rouvrir.
 
 ## 1. Lot courant
 
-**Lot Shell Maitre TERMINE, etapes 1 a 12. En attente de validation.**
+**Lot Dashboard plateforme TERMINE (CSM-1). En attente de validation.**
+
+Ecran 10 rendu dans l'application reelle. `0.1.7` installee, typecheck 0 erreur,
+`npm run build -w apps/console` **reussi** (4 routes, `/` en statique), capture de
+`http://localhost:3000/` comparee a `backoffice/pages/console-dashboard.html` :
+4 tuiles, tendance 30 jours avec pics, panneaux Moderation et Nouveaux
+partenaires, compteurs de nav 128 et 3. Conforme.
+
+Le **marqueur d'item actif est enfin observable** sur « Plateforme » : `/`
+correspond desormais a un item de la nav.
+
+Donnees fictives du prototype, aucun appel API. Le backend est un chantier separe
+(CdC §9.4, depot `eventflow-api`).
+
+**Defaut du design system corrige en cours de lot** : `'use client'` etait retire
+par tsup a la publication, les 25 composants interactifs etaient donc inutilisables
+depuis une page serveur. Corrige et publie en `0.1.7`. Voir le RUNDOC du design
+system, journal du 2026-07-31.
+
+## 1bis. Lot precedent
+
+**Lot Shell Maitre TERMINE, etapes 1 a 12.**
 
 Toute la chaine est validee de bout en bout, pour la premiere fois :
 `0.1.4` publiee et installee, `master` expose par le paquet,
@@ -56,9 +77,10 @@ Aucun composant ecrit dans `apps/console` : la coquille vit dans
 
 Perimetre `apps/console` = Console Maitre.
 
-- **Lot Dashboard plateforme**, ecran 10, exigence CSM-1. **Prochain lot.**
-  Composants a creer dans le design system : StatCard, TrendChart. Route `/` du
-  groupe `(app)`, qui rendra aussi visible le marqueur d'item actif.
+- **Lot Partenaires**, ecran 11, exigences CSM-2 et CSM-5. **Prochain lot.**
+  Rendu de reference : `backoffice/pages/partenaires.html`. Composants attendus :
+  `DataTable`, `Avatar`, `Badge` (conformes), plus les statuts d'Organisation et
+  les 6 badges de cycle de vie a corriger dans le design system.
 - **Lot Partenaires**, ecran 11, exigences CSM-2 et CSM-5.
 - **Lot Moderation**, ecran 12, exigence CSM-3.
 - **Lot Audit**, ecran 13, exigence CSM-4.
@@ -192,6 +214,27 @@ ete traites.
 | Aucun composant ecrit dans `apps/console` | regle 1, tenue depuis le lot Auth |
 
 ## 10. Journal
+
+### 2026-07-31, lot Dashboard plateforme (CSM-1) clos
+- **NOUVEAU** `packages/shell/platform-dashboard.tsx` : 4 tuiles `StatCard`,
+  `TrendChart` 30 jours, panneaux Moderation et Nouveaux partenaires. Compose a
+  100 % depuis le design system publie.
+- **NOUVEAU** `apps/console/app/(app)/page.tsx` : monte le tableau de bord (P9).
+- **SUPPRIME** `apps/console/app/page.tsx` : il redirigeait vers `/login` faute de
+  module enregistre et entrait en conflit de route avec `/` du groupe `(app)`.
+- Compteurs de nav cables a 128 et 3 dans `(app)/layout.tsx`.
+- **Defaut design system rencontre et corrige** : `npm run build -w apps/console`
+  echouait sur `TypeError: c.useState is not a function`. Cause prouvee : tsup
+  retire `'use client'` des sources et rien ne la reinjectait ; les 25 composants
+  interactifs etaient publies sans elle depuis la premiere version. Corrige par
+  une passe `onSuccess` fichier par fichier, publie en `0.1.7`. Plages alignees
+  sur `^0.1.7`.
+- **Verifications reelles** : `npx tsc -p apps/console --noEmit` **0 erreur** ;
+  `npm run build -w apps/console` **reussi**, `/` en statique ; serveur de
+  developpement `/` 200 ; capture comparee a `console-dashboard.html`, conforme ;
+  marqueur d'item actif desormais visible sur « Plateforme ».
+- `npm run lint` : toujours la seule erreur preexistante dans `auth-page.tsx`
+  ligne 167, fichier du lot Auth non modifie ici.
 
 ### 2026-07-30, etapes 10 a 12, lot Shell Maitre clos
 - `0.1.4` installee, `master?: boolean` et `masterLabel` exposes par le paquet.

@@ -6,10 +6,15 @@ import modulesJson from '../../modules.json';
 // (RG-1). Ici on ne fait que le monter. Référence : maquette écran 1
 // (backoffice/pages/shell.html?console=master).
 //
-// Les compteurs de nav ne sont pas câblés : ils viendront de l'API (CSM-2/CSM-3),
-// hors périmètre de ce lot. Sans valeur, les items s'affichent sans compteur.
+// Compteurs de nav : jeu fictif du prototype (128 Organisations, 3 signalements
+// en attente), cohérent avec le contenu du tableau de bord. Le backend est un
+// chantier séparé (CdC §9.4) ; ces valeurs viendront de l'API le moment venu.
 export default function AppLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
-  return <MasterShell brand={modulesJson.brand}>{children}</MasterShell>;
+  return (
+    <MasterShell brand={modulesJson.brand} partnerCount={128} moderationCount={3}>
+      {children}
+    </MasterShell>
+  );
 }
