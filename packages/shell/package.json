@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "@ef/module-kit": "*",
-    "@rwtechnology/eventflow-design-system": "^0.1.2"
+    "@rwtechnology/eventflow-design-system": "^0.1.4"
   },
   "peerDependencies": {
     "@tanstack/react-query": "*",
