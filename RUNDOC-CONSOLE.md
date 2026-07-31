@@ -16,27 +16,31 @@ n'est possible. Point clos, ne pas rouvrir.
 
 ## 1. Lot courant
 
-**Nav derivee du registry TERMINEE. Dernier ecart architectural comble.**
+**Passe theme sombre et responsive TERMINEE. Un defaut trouve et corrige.**
 
-`MasterShell` ne code plus aucun libelle ni aucune route : la nav vient du
-registry de modules (P8). Chaque module declare sa section via `useNavSection` ;
-`useModuleNav` les collecte dans l'ordre du registry et **fusionne les sections
-de meme eyebrow**, ce que la maquette exige (Plateforme et Partenaires sous
-« Plateforme », Moderation et Audit sous « Controle »).
+Premiere verification du theme sombre et du responsive sur les pages livrees.
+C'etait le trou de verification le plus ancien du projet : toutes les captures
+precedentes etaient en clair, a 1440 px.
 
-Les compteurs 128 et 3 sont passes dans les modules qui possedent la donnee :
-`NavItem` gagne une prop `trailing` dans `@ef/module-kit`. La coquille ne connait
-plus ces chiffres.
+**Theme sombre : conforme.** Capture sur le tableau de bord et l'audit. Surfaces,
+cartes, graphe, badges, tables remappent correctement. Lisere ambre et badge
+maitre presents.
 
-Consequence : ajouter un module a `modules.json` suffit desormais a le faire
-apparaitre dans la nav, sans toucher au shell.
+**Responsive : conforme apres correctif.** A 390 px la sidebar passe en burger et
+les tuiles se rangent en 2x2, conforme a la maquette.
 
-**Verifications** : typecheck 0, build reussi 8 routes, les 4 routes repondent
-200, capture identique a l'etat precedent (2 eyebrows, compteurs, marqueur
-actif). Aucun libelle metier ne subsiste dans le code du shell.
+**Defaut trouve** : `DataTable` ecrasait ses colonnes au lieu de defiler. Le
+conteneur portait bien `overflow-x-auto`, mais la table n'etait que `w-full` :
+rien ne declenchait le debordement, et 4 colonnes devenaient inatteignables.
+Corrige dans le design system par un seuil `min-w-table` adosse a un token,
+publie en `0.1.11`. Mesure apres correctif : table 911 px dans un conteneur de
+342 px, `canScroll=true`, colonnes atteintes par defilement.
 
-**Architecture alignee sur `cp-admin-console`** : modules metier autonomes,
-routes generees depuis les manifestes, nav data-driven, shell reduit a l'infra.
+Trois ecrans livres avaient une table inutilisable sur mobile, jamais vue faute
+de capture sous 1440 px.
+
+**Non traite** : deux avertissements NextAuth (`NEXTAUTH_URL`, `NO_SECRET`)
+absents de l'environnement. Sans effet tant que l'auth n'est pas cablee.
 
 ## 2. Lots termines
 
@@ -69,6 +73,8 @@ routes generees depuis les manifestes, nav data-driven, shell reduit a l'infra.
   panneau de detail. `SidePanel` cree dans le design system, `0.1.10`.
 - **Nav derivee du registry** (2026-07-31). `MasterShell` consomme
   `useNavSection` de chaque module ; compteurs deplaces dans les modules.
+- **Passe theme sombre et responsive** (2026-07-31). Defaut `DataTable` corrige,
+  `0.1.11`. Premiere verification hors clair/1440 px.
 
 ## 3. Lots restants
 
@@ -202,8 +208,8 @@ ete traites.
 - **Ecrans 2 a 8** : cible `apps/partner`, application absente de ce depot.
 - **Backend** : aucun appel API. Toutes les pages rendent le jeu fictif du
   prototype. Chantier separe (CdC §9.4, depot `eventflow-api`).
-- **Theme sombre et responsive** : les classes sont posees sur toutes les pages
-  livrees, aucune capture n'a ete faite pour les verifier.
+- **Theme sombre et responsive** : verifies sur le tableau de bord, l'audit et la
+  liste des partenaires. Les autres pages n'ont pas ete capturees hors clair.
 - **Comportements non cables** : `signIn` sur `/login`, changement de plan sur la
   fiche, bouton « Voir en tant que » (CSM-5).
 
