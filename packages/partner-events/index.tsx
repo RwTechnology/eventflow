@@ -22,6 +22,7 @@ export const partnerEventsModule: Module = {
 };
 
 export { EventsList } from './components/events-list';
+export { EventDetail, type EventDetailProps } from './components/event-detail';
 export {
   GateBanner,
   GateModal,

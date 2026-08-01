@@ -1,6 +1,7 @@
 'use client';
 
 import * as React from 'react';
+import Link from 'next/link';
 import { Archive, Copy, Lock, MoreHorizontal, Search } from 'lucide-react';
 import { Button } from '@rwtechnology/eventflow-design-system/button';
 import { CapacityGauge } from '@rwtechnology/eventflow-design-system/capacity-gauge';
@@ -328,7 +329,12 @@ export function EventsList() {
                     <div className="flex items-center gap-3">
                       <DateBlock day={e.day} month={e.month} />
                       <div className="min-w-0">
-                        <p className="truncate font-semibold text-text-primary">{e.title}</p>
+                        <Link
+                          href={`/partner-console/evenements/${e.id}`}
+                          className="truncate font-semibold text-text-primary hover:text-primary-700 hover:underline"
+                        >
+                          {e.title}
+                        </Link>
                         <p className="truncate text-xs text-text-secondary">
                           {e.venue} · {e.time}
                         </p>

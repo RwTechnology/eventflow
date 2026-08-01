@@ -3,6 +3,7 @@
   "package": "@ef/partner-events",
   "basePath": "(app)/partner-console",
   "routes": [
-    { "route": "evenements/page.tsx", "module": "events-page" }
+    { "route": "evenements/page.tsx", "module": "events-page" },
+    { "route": "evenements/[id]/page.tsx", "module": "event-detail-page" }
   ]
 }

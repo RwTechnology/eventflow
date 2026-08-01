@@ -16,36 +16,31 @@ n'est possible. Point clos, ne pas rouvrir.
 
 ## 1. Lot courant
 
-**Ecran 8, etats de gating TERMINE (PTN-11, PTN-10).**
+**Ecran 6, detail d'un evenement TERMINE (PTN-3 a PTN-10).**
 
-`GateBanner`, `GateModal` et `GateLock` dans `@ef/partner-events` : le gating
-apparait sur les ecrans de ce module, il vit avec eux. Aucune intervention
-design system, `Alert`, `Modal` et `Popover` suffisaient.
+Route `/partner-console/evenements/[id]`, 5 onglets couvrant 7 exigences :
+Apercu (PTN-9 journal d'activite), Reservations (PTN-4), Statistiques (PTN-5),
+Agents (PTN-6), Parametres (PTN-3, PTN-7).
 
-**La doctrine de la maquette est inscrite en commentaire du fichier**, parce
-qu'elle se perd vite a l'usage :
-1. toujours visible, jamais cache — une fonctionnalite verrouillee reste
-   affichee avec son cadenas ;
-2. trois informations, toujours : ou j'en suis, pourquoi, comment avancer.
-   **L'upgrade n'est jamais la seule issue** ;
-3. ton factuel, pas d'urgence artificielle ni de compte a rebours ;
-4. `warning` pour la limite atteinte, jamais `danger` : atteindre une limite
-   n'est pas une erreur.
+**L'onglet actif vit dans l'URL** (`?onglet=`) : un lien vers les reservations
+doit rester partageable. Verifie par sonde DOM : 5 onglets, `?onglet=agents`
+selectionne bien Agents.
 
-Le CTA « Nouvel evenement » n'est plus mort : il ouvre la `GateModal` qui
-explique et propose 3 issues a egalite, l'upgrade en dernier.
+Ecrit dans `@ef/partner-events`, conformement au regroupement par domaine :
+liste, detail et gating sont trois faces du meme objet. Aucune intervention
+design system, `Tabs` existait deja.
 
-**Verifications** : typecheck 0, build reussi, route 200, capture de la modale
-conforme, lint 0 erreur.
+Deux points de doctrine tenus :
+- l'export CSV et le rappel J-1 sont **verrouilles mais visibles** (`GateLock`),
+  jamais masques ;
+- le taux de presence n'affiche pas « 0 % » mais « Disponible apres l'evenement » :
+  une donnee absente n'est pas une donnee nulle.
 
-**Decision de decoupage** (validee) : regroupement par domaine plutot qu'un
-module par ecran. Les ecrans 4, 5, 6 et 8 vivent dans `@ef/partner-events` —
-trois vues du meme objet plus son gating. `@ef/partner-dashboard` et
-`@ef/partner-plan` restent separes : vue d'ensemble et abonnement sont des
-domaines distincts. Modele du depot de reference, ou un module = un produit.
+**Verifications** : typecheck 0, build reussi, les 3 onglets testes repondent
+200, capture conforme, sonde DOM sur l'etat d'onglet, lint 0 erreur.
 
-**Reste sur `apps/partner`** : ecrans 5 (creation en 5 etapes) et 6 (detail en
-5 onglets), les deux plus lourds du projet.
+**Reste sur `apps/partner`** : ecran 5, creation en 5 etapes. Dernier ecran du
+projet.
 
 ## 2. Lots termines
 
