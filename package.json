@@ -7,9 +7,11 @@
     "apps/*"
   ],
   "scripts": {
-    "build": "npm run build:console",
+    "build": "npm run build:console && npm run build:partner",
     "build:console": "npm run build -w apps/console",
+    "build:partner": "npm run build -w apps/partner",
     "dev:console": "npm run dev -w apps/console",
+    "dev:partner": "npm run dev -w apps/partner",
     "scaffold:all": "node scripts/scaffold-routes.mjs apps/console && node scripts/scaffold-routes.mjs apps/partner",
     "gen": "plop",
     "gen:module": "plop module",
