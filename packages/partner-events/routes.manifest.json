@@ -4,6 +4,7 @@
   "basePath": "(app)/partner-console",
   "routes": [
     { "route": "evenements/page.tsx", "module": "events-page" },
+    { "route": "evenements/nouveau/page.tsx", "module": "event-create-page" },
     { "route": "evenements/[id]/page.tsx", "module": "event-detail-page" }
   ]
 }

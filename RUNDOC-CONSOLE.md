@@ -16,31 +16,29 @@ n'est possible. Point clos, ne pas rouvrir.
 
 ## 1. Lot courant
 
-**Ecran 6, detail d'un evenement TERMINE (PTN-3 a PTN-10).**
+**Ecran 5, creation en 5 etapes TERMINE (PTN-2, PTN-10, PTN-11).**
 
-Route `/partner-console/evenements/[id]`, 5 onglets couvrant 7 exigences :
-Apercu (PTN-9 journal d'activite), Reservations (PTN-4), Statistiques (PTN-5),
-Agents (PTN-6), Parametres (PTN-3, PTN-7).
+**Les 13 ecrans du back-office sont livres.** Console Maitre : ecrans 1, 9 a 13.
+Console Partenaire : ecrans 3 a 8.
 
-**L'onglet actif vit dans l'URL** (`?onglet=`) : un lien vers les reservations
-doit rester partageable. Verifie par sonde DOM : 5 onglets, `?onglet=agents`
-selectionne bien Agents.
+Route `/partner-console/evenements/nouveau`, etape dans l'URL (`?etape=`).
+Stepper 5 etapes, colonne etroite, sauvegarde continue annoncee. Aucune
+intervention design system, `Steps` existait deja.
 
-Ecrit dans `@ef/partner-events`, conformement au regroupement par domaine :
-liste, detail et gating sont trois faces du meme objet. Aucune intervention
-design system, `Tabs` existait deja.
+**Le principe le plus important de cet ecran** : le gating **n'empeche pas la
+saisie** (PTN-11). Une capacite au-dela de 50 sur Free affiche un avertissement
+et un chemin d'upgrade, jamais un blocage — l'organisateur decrit son evenement
+reel, la limite porte sur les reservations, pas sur sa description.
 
-Deux points de doctrine tenus :
-- l'export CSV et le rappel J-1 sont **verrouilles mais visibles** (`GateLock`),
-  jamais masques ;
-- le taux de presence n'affiche pas « 0 % » mais « Disponible apres l'evenement » :
-  une donnee absente n'est pas une donnee nulle.
+**Verifie par sonde DOM** : `gateCapacite=true` a 480 places sans blocage de la
+saisie, `erreurHoraire=true` quand la fin precede le debut.
 
-**Verifications** : typecheck 0, build reussi, les 3 onglets testes repondent
-200, capture conforme, sonde DOM sur l'etat d'onglet, lint 0 erreur.
+**Piege de routage evite** : `evenements/nouveau` doit etre declare avant
+`evenements/[id]` dans le manifeste, sinon `/nouveau` se resout comme un
+identifiant. Verifie : les 2 routes repondent 200 separement.
 
-**Reste sur `apps/partner`** : ecran 5, creation en 5 etapes. Dernier ecran du
-projet.
+**Verifications** : typecheck 0, build reussi, 3 URL testees 200, capture
+conforme, lint 0 erreur.
 
 ## 2. Lots termines
 

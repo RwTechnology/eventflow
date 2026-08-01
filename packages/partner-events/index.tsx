@@ -23,6 +23,7 @@ export const partnerEventsModule: Module = {
 
 export { EventsList } from './components/events-list';
 export { EventDetail, type EventDetailProps } from './components/event-detail';
+export { EventCreate, type EventCreateProps } from './components/event-create';
 export {
   GateBanner,
   GateModal,
