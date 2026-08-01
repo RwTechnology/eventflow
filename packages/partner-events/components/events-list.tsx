@@ -12,6 +12,7 @@ import {
   type EventLifecycleStatus,
 } from '@rwtechnology/eventflow-design-system/status-badge';
 import { Tooltip } from '@rwtechnology/eventflow-design-system/tooltip';
+import { GateBanner, GateModal } from './gating';
 
 // EventsList — liste des événements de la Console Partenaire (CdC PTN-3, PTN-7,
 // PTN-11). Composée à 100 % depuis le design system publié (RG-1).
@@ -162,6 +163,7 @@ function DateBlock({ day, month }: { day: string; month: string }) {
 }
 
 export function EventsList() {
+  const [gateOpen, setGateOpen] = React.useState(false);
   const [query, setQuery] = React.useState('');
   const [status, setStatus] = React.useState('all');
   const [sort, setSort] = React.useState('date');
@@ -201,14 +203,44 @@ export function EventsList() {
 
         {/* PTN-11 : le CTA est verrouillé, la limite du plan est atteinte.
             Cohérent avec le GateBanner du tableau de bord. */}
-        <Tooltip content="Limite du plan Free atteinte — archivez un événement ou passez en Pro">
-          <span>
-            <Button disabled leftIcon={<Lock className="h-icon-sm w-icon-sm" aria-hidden="true" />}>
-              Nouvel événement
-            </Button>
-          </span>
+        {/* Le CTA n'est pas mort : il ouvre la GateModal qui explique et propose
+            des issues (maquette écran 8, état 2). */}
+        <Tooltip content="Limite du plan Free atteinte">
+          <Button
+            onClick={() => setGateOpen(true)}
+            leftIcon={<Lock className="h-icon-sm w-icon-sm" aria-hidden="true" />}
+          >
+            Nouvel événement
+          </Button>
         </Tooltip>
       </div>
+
+      {/* PTN-11 : où j'en suis, pourquoi, comment avancer. */}
+      <GateBanner
+        status="2/2 événements actifs"
+        detail="votre plan Free est au maximum. « Nuit électro » se termine le 14 août et libère un emplacement automatiquement."
+      />
+
+      <GateModal
+        open={gateOpen}
+        onOpenChange={setGateOpen}
+        title="Votre 3e événement actif attendra un peu"
+        reassurance="Le plan Free permet 2 événements actifs simultanés. Rien n’est perdu : votre brouillon est enregistré et prêt à publier."
+        options={[
+          {
+            title: 'Attendre le 14 août',
+            detail: '« Nuit électro » se termine et libère un emplacement automatiquement.',
+          },
+          {
+            title: 'Archiver un événement terminé',
+            detail: '« Fête de la musique » peut être archivé dès maintenant.',
+          },
+          {
+            title: 'Passer en Pro',
+            detail: 'Événements actifs illimités — disponible prochainement.',
+          },
+        ]}
+      />
 
       <div className="flex flex-wrap items-center gap-2">
         <div className="relative min-w-64 max-w-sm flex-1">

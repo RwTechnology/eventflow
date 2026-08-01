@@ -22,3 +22,13 @@ export const partnerEventsModule: Module = {
 };
 
 export { EventsList } from './components/events-list';
+export {
+  GateBanner,
+  GateModal,
+  GateLock,
+  type GateBannerProps,
+  type GateModalProps,
+  type GateLockProps,
+  type GateLevel,
+  type GateOption,
+} from './components/gating';

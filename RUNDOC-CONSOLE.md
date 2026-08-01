@@ -16,30 +16,36 @@ n'est possible. Point clos, ne pas rouvrir.
 
 ## 1. Lot courant
 
-**Ecran 7, page Plan TERMINE (PTN-12).**
+**Ecran 8, etats de gating TERMINE (PTN-11, PTN-10).**
 
-Module `@ef/partner-plan`, route `/partner-console/plan`. Aucune intervention
-design system : `PlanMeter`, cree pour la fiche Organisation, sert tel quel.
+`GateBanner`, `GateModal` et `GateLock` dans `@ef/partner-events` : le gating
+apparait sur les ecrans de ce module, il vit avec eux. Aucune intervention
+design system, `Alert`, `Modal` et `Popover` suffisaient.
 
-Trois jauges a leur limite (`2/2`, `50/50`, `1/1`), chacune suivie d'une note qui
-dit **quand ca se debloque** : une jauge pleine sans perspective serait un
-cul-de-sac. Encart de principe : le gating s'explique, il ne s'excuse pas.
-Comparatif des 3 plans repris **ligne a ligne du CdC §4.4**, colonne Free
-surlignee et marquee « vous ».
+**La doctrine de la maquette est inscrite en commentaire du fichier**, parce
+qu'elle se perd vite a l'usage :
+1. toujours visible, jamais cache — une fonctionnalite verrouillee reste
+   affichee avec son cadenas ;
+2. trois informations, toujours : ou j'en suis, pourquoi, comment avancer.
+   **L'upgrade n'est jamais la seule issue** ;
+3. ton factuel, pas d'urgence artificielle ni de compte a rebours ;
+4. `warning` pour la limite atteinte, jamais `danger` : atteindre une limite
+   n'est pas une erreur.
 
-Pro et Business : badge « bientot », aucun prix, bouton « Me prevenir »
-desactive. La tarification arrive en v1.1 (§4.4) — aucune promesse chiffree.
+Le CTA « Nouvel evenement » n'est plus mort : il ouvre la `GateModal` qui
+explique et propose 3 issues a egalite, l'upgrade en dernier.
 
-**Erreur de donnees corrigee** : j'avais mis `374/480` sur la jauge des
-reservations, en confondant la capacite de la salle avec la limite du plan. La
-maquette dit `jusqu'a 50` : le plafond porte sur les reservations comptees par
-evenement, pas sur la jauge de billetterie. Corrige apres relecture du rendu.
+**Verifications** : typecheck 0, build reussi, route 200, capture de la modale
+conforme, lint 0 erreur.
 
-**Verifications** : typecheck 0, build reussi, route 200, capture conforme,
-lint 0 erreur.
+**Decision de decoupage** (validee) : regroupement par domaine plutot qu'un
+module par ecran. Les ecrans 4, 5, 6 et 8 vivent dans `@ef/partner-events` —
+trois vues du meme objet plus son gating. `@ef/partner-dashboard` et
+`@ef/partner-plan` restent separes : vue d'ensemble et abonnement sont des
+domaines distincts. Modele du depot de reference, ou un module = un produit.
 
-**Reste sur `apps/partner`** : ecrans 5 (creation en 5 etapes), 6 (detail en
-5 onglets), 8 (etats de gating).
+**Reste sur `apps/partner`** : ecrans 5 (creation en 5 etapes) et 6 (detail en
+5 onglets), les deux plus lourds du projet.
 
 ## 2. Lots termines
 
