@@ -1,0 +1,22 @@
+{
+  "name": "@ef/partner-plan",
+  "version": "0.0.0",
+  "private": true,
+  "main": "./index.tsx",
+  "types": "./index.tsx",
+  "exports": {
+    ".": "./index.tsx",
+    "./pages/*": "./pages/*.tsx",
+    "./next-config": "./next-config.ts"
+  },
+  "dependencies": {
+    "@ef/module-kit": "*",
+    "@rwtechnology/eventflow-design-system": "^0.1.15"
+  },
+  "peerDependencies": {
+    "lucide-react": "*",
+    "next": "*",
+    "react": "*",
+    "react-dom": "*"
+  }
+}

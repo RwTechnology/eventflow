@@ -16,34 +16,30 @@ n'est possible. Point clos, ne pas rouvrir.
 
 ## 1. Lot courant
 
-**Ecran 4, liste des evenements TERMINE (PTN-3, PTN-7, PTN-11).**
+**Ecran 7, page Plan TERMINE (PTN-12).**
 
-Module `@ef/partner-events`, route `/partner-console/evenements`. Les 7
-evenements du prototype couvrent les **6 etats du cycle de vie** : la liste est
-la demonstration du cycle, c'est ce que la maquette montre.
+Module `@ef/partner-plan`, route `/partner-console/plan`. Aucune intervention
+design system : `PlanMeter`, cree pour la fiche Organisation, sert tel quel.
 
-Toolbar avec recherche sur titre et lieu, tri, filtres en segments avec leurs
-compteurs. Table : bloc-date S3, `StatusBadge` du cycle, `CapacityGauge` inline
-ou texte de presence selon l'etat, colonne attente, actions dupliquer (PTN-7,
-directe) et archiver (sur les termines). Lignes passees attenuees. CTA
-« Nouvel evenement » verrouille avec tooltip (PTN-11), coherent avec le
-GateBanner de l'ecran 3.
+Trois jauges a leur limite (`2/2`, `50/50`, `1/1`), chacune suivie d'une note qui
+dit **quand ca se debloque** : une jauge pleine sans perspective serait un
+cul-de-sac. Encart de principe : le gating s'explique, il ne s'excuse pas.
+Comparatif des 3 plans repris **ligne a ligne du CdC §4.4**, colonne Free
+surlignee et marquee « vous ».
 
-**Les 6 badges de cycle de vie ajoutes au design system** (`0.1.15`) : c'est
-l'ecart consigne comme differe il y a plusieurs lots, en notant qu'il serait
-requis par les ecrans 4 et 6. L'ecran 4 est arrive.
+Pro et Business : badge « bientot », aucun prix, bouton « Me prevenir »
+desactive. La tarification arrive en v1.1 (§4.4) — aucune promesse chiffree.
 
-**Defaut rencontre** : `Tooltip` leve une erreur sans `TooltipProvider`, le build
-echouait au prerendu. Le provider est monte dans `Providers` du shell, a la
-racine des deux apps : une app peut afficher un tooltip n'importe ou, le monter
-une fois evite d'y penser a chaque usage.
+**Erreur de donnees corrigee** : j'avais mis `374/480` sur la jauge des
+reservations, en confondant la capacite de la salle avec la limite du plan. La
+maquette dit `jusqu'a 50` : le plafond porte sur les reservations comptees par
+evenement, pas sur la jauge de billetterie. Corrige apres relecture du rendu.
 
-**Verifications** : typecheck 0 sur les 2 apps, les 2 builds reussissent, la
-route repond 200, capture conforme, sonde DOM confirmant 7 boutons Dupliquer et
-1 Archiver sur l'evenement termine, lint 0 erreur.
+**Verifications** : typecheck 0, build reussi, route 200, capture conforme,
+lint 0 erreur.
 
 **Reste sur `apps/partner`** : ecrans 5 (creation en 5 etapes), 6 (detail en
-5 onglets), 7 (page Plan), 8 (etats de gating).
+5 onglets), 8 (etats de gating).
 
 ## 2. Lots termines
 

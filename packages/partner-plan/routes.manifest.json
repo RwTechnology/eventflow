@@ -1,0 +1,8 @@
+{
+  "id": "partner-plan",
+  "package": "@ef/partner-plan",
+  "basePath": "(app)/partner-console",
+  "routes": [
+    { "route": "plan/page.tsx", "module": "plan-page" }
+  ]
+}

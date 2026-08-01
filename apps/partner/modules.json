@@ -2,6 +2,7 @@
   "brand": "EventFlow Partenaire",
   "modules": [
     "@ef/partner-dashboard",
-    "@ef/partner-events"
+    "@ef/partner-events",
+    "@ef/partner-plan"
   ]
 }

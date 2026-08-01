@@ -6,10 +6,12 @@ import type { ModuleNextConfig } from '@ef/module-kit';
 // Ajouté manuellement lors du branchement d'un module à backend (cf. §7.2).
 import { partnerDashboardNextConfig } from '@ef/partner-dashboard/next-config';
 import { partnerEventsNextConfig } from '@ef/partner-events/next-config';
+import { partnerPlanNextConfig } from '@ef/partner-plan/next-config';
 
 const moduleConfigs: ModuleNextConfig[] = [
   partnerDashboardNextConfig,
   partnerEventsNextConfig,
+  partnerPlanNextConfig,
 ];
 
 // Packages internes toujours transpilés (infra) + modules embarqués.

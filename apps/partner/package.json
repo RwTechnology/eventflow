@@ -15,6 +15,7 @@
     "@ef/module-kit": "*",
     "@ef/partner-dashboard": "*",
     "@ef/partner-events": "*",
+    "@ef/partner-plan": "*",
     "@ef/shell": "*",
     "@rwtechnology/eventflow-design-system": "^0.1.15"
   }
